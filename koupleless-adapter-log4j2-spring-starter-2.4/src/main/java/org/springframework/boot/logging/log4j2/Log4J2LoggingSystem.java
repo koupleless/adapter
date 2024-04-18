@@ -305,7 +305,7 @@ public class Log4J2LoggingSystem extends Slf4JLoggingSystem {
     }
 
     private LoggerContext getLoggerContext() {
-        return (LoggerContext) LogManager.getContext(false);
+        return (LoggerContext) LogManager.getContext(Thread.currentThread().getContextClassLoader(), false);
     }
 
     private boolean isAlreadyInitialized(LoggerContext loggerContext) {

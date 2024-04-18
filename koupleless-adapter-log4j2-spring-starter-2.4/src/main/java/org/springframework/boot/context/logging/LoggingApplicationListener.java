@@ -17,15 +17,20 @@
 package org.springframework.boot.context.logging;
 
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiConsumer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import org.apache.logging.log4j.ThreadContext;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.context.event.ApplicationEnvironmentPreparedEvent;
@@ -50,6 +55,7 @@ import org.springframework.context.event.GenericApplicationListener;
 import org.springframework.core.Ordered;
 import org.springframework.core.ResolvableType;
 import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.EnumerablePropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.core.log.LogMessage;
 import org.springframework.util.LinkedMultiValueMap;
@@ -278,6 +284,10 @@ public class LoggingApplicationListener implements GenericApplicationListener {
         }
         this.loggerGroups = new LoggerGroups(DEFAULT_GROUP_LOGGERS);
         initializeEarlyLoggingLevel(environment);
+
+        // diff made by koupleless
+        initalizeThreadContextConfig(environment);
+
         initializeSystem(environment, this.loggingSystem, this.logFile);
         initializeFinalLoggingLevels(environment, this.loggingSystem);
         registerShutdownHookIfNecessary(environment, this.loggingSystem);
@@ -338,6 +348,25 @@ public class LoggingApplicationListener implements GenericApplicationListener {
             initializeSpringBootLogging(system, this.springBootLogging);
         }
         setLogLevels(system, environment);
+    }
+
+    private void initalizeThreadContextConfig(ConfigurableEnvironment environment) {
+        Map<String, String> configMap = new ConcurrentHashMap<>();
+        Set<String> configKeys = new HashSet<>();
+        environment.getPropertySources().stream()
+                .filter(propertySource -> propertySource instanceof EnumerablePropertySource)
+                .forEach(propertySource -> configKeys.addAll(
+                        Arrays.asList(((EnumerablePropertySource<?>) propertySource).getPropertyNames())));
+
+        configKeys.forEach(key -> {
+            try {
+                configMap.put(key, environment.getProperty(key));
+            } catch (Throwable t) {
+                // ignore, 异常在 AlipayPrintEnvironmentListener 中打印
+            }
+        });
+
+        configMap.forEach(ThreadContext::put);
     }
 
     private void bindLoggerGroups(ConfigurableEnvironment environment) {
