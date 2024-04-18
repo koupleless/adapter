@@ -1,22 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.alipay.sofa.koupleless</groupId>
-        <artifactId>koupleless-adapter-ext</artifactId>
+        <artifactId>koupleless-adapter</artifactId>
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>koupleless-adapter-dubbo2.6</artifactId>
+    <artifactId>koupleless-adapter-log4j2-spring-starter-3.2</artifactId>
     <version>${revision}</version>
+
+    <properties>
+        <spring.boot.version>3.2.0</spring.boot.version>
+        <java.version>1.8</java.version>
+    </properties>
 
     <dependencies>
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>dubbo</artifactId>
-            <version>2.6.12</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <version>${spring.boot.version}</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j2</artifactId>
+            <version>${spring.boot.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -41,19 +58,20 @@
 
                         <configuration>
                             <activator>
-                                com.alipay.sofa.koupleless.adapter.Dubbo26AdapterActivator
+                                com.alipay.sofa.koupleless.adapter.Log4j2AdapterActivator
                             </activator>
                             <exported>
-<!--                                <mode>override</mode>-->
-                                <packages>
-                                    <package>com.alibaba.dubbo.common</package>
-                                    <package>com.alibaba.dubbo.config.spring.extension</package>
-                                    <package>com.alibaba.dubbo.rpc.protocol.dubbo</package>
-                                </packages>
+                                <!--                                <mode>override</mode>-->
+                                <classes>
+                                    <class>
+                                        org.springframework.boot.logging.log4j2.Log4J2LoggingSystem
+                                    </class>
+                                </classes>
                             </exported>
                             <excludes>
                                 <exclude>*:*:*</exclude>
-                                <exclude>com.alipay.sofa.koupleless:koupleless-adapter-dubbo2.6</exclude>
+                                <exclude>com.alipay.sofa.koupleless:koupleless-adapter-log4j2
+                                </exclude>
                             </excludes>
                         </configuration>
                     </execution>
@@ -61,5 +79,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

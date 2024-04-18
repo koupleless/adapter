@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.alipay.sofa.koupleless</groupId>
-        <artifactId>koupleless-adapter-ext</artifactId>
+        <artifactId>koupleless-adapter</artifactId>
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>koupleless-adapter-log4j2</artifactId>
+
+    <artifactId>koupleless-adapter-log4j2-spring-starter-2.1</artifactId>
     <version>${revision}</version>
+    <properties>
+        <spring.boot.version>2.1.9.RELEASE</spring.boot.version>
+        <java.version>1.8</java.version>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -55,7 +61,7 @@
                                 com.alipay.sofa.koupleless.adapter.Log4j2AdapterActivator
                             </activator>
                             <exported>
-<!--                                <mode>override</mode>-->
+                                <!--                                <mode>override</mode>-->
                                 <classes>
                                     <class>
                                         org.springframework.boot.logging.log4j2.Log4J2LoggingSystem
@@ -67,7 +73,7 @@
                             </exported>
                             <excludes>
                                 <exclude>*:*:*</exclude>
-                                <exclude>com.alipay.sofa.koupleless:koupleless-adapter-log4j2</exclude>
+                                <exclude>com.alipay.sofa.koupleless:koupleless-adapter-log4j2-springboot2.1.9</exclude>
                             </excludes>
                         </configuration>
                     </execution>
@@ -75,4 +81,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>

@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.alipay.sofa.koupleless</groupId>
-        <artifactId>koupleless-adapter-ext</artifactId>
+        <artifactId>koupleless-adapter</artifactId>
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
@@ -27,6 +27,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot</artifactId>
+            <version>${spring.boot.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -38,6 +39,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
+            <version>${spring.boot.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

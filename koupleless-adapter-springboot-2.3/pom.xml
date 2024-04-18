@@ -5,16 +5,17 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.alipay.sofa.koupleless</groupId>
-        <artifactId>koupleless-adapter-ext</artifactId>
+        <artifactId>koupleless-adapter</artifactId>
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>koupleless-adapter-springboot2.3.x</artifactId>
+    <artifactId>koupleless-adapter-springboot-2.3</artifactId>
     <version>${revision}</version>
 
     <properties>
         <spring.boot.version>2.3.5.RELEASE</spring.boot.version>
+        <java.version>1.8</java.version>
     </properties>
 
     <dependencies>
