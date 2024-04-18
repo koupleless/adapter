@@ -788,7 +788,8 @@ public final class Logger implements org.slf4j.Logger, LocationAwareLogger,
     public LoggerContext getLoggerContext() {
         // diff that made by koupleless, get loggerContext from loggerContextMap
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        return loggerContextMap.computeIfAbsent(classLoader, k -> (LoggerContext) StaticLoggerBinder.getSingleton().getLoggerFactory());
+        return loggerContextMap.computeIfAbsent(classLoader,
+            k -> (LoggerContext) StaticLoggerBinder.getSingleton().getLoggerFactory());
     }
 
     public void log(Marker marker, String fqcn, int levelInt, String message, Object[] argArray,
