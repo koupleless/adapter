@@ -117,6 +117,7 @@ public final class Logger implements org.slf4j.Logger, LocationAwareLogger,
         this.parent = parent;
 
         // diff that made by koupleless, add this loggerContext to loggerContextMap
+        final transient Map<ClassLoader, LoggerContext> loggerContextMap = new ConcurrentHashMap<>();
         loggerContextMap.putIfAbsent(Thread.currentThread().getContextClassLoader(), loggerContext);
     }
 
