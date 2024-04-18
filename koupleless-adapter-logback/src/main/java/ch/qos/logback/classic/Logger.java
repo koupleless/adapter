@@ -23,9 +23,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.slf4j.ILoggerFactory;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
 import org.slf4j.impl.StaticLoggerBinder;
@@ -110,14 +110,13 @@ public final class Logger implements org.slf4j.Logger, LocationAwareLogger,
     /**
      * diff that made by koupleless, add this map to store loggerContext for each biz module
      */
-    final transient Map<ClassLoader, LoggerContext>         loggerContextMap = new HashMap<>();
+    final transient Map<ClassLoader, LoggerContext>         loggerContextMap = new ConcurrentHashMap<>();
 
     Logger(String name, Logger parent, LoggerContext loggerContext) {
         this.name = name;
         this.parent = parent;
 
         // diff that made by koupleless, add this loggerContext to loggerContextMap
-        final transient Map<ClassLoader, LoggerContext> loggerContextMap = new ConcurrentHashMap<>();
         loggerContextMap.putIfAbsent(Thread.currentThread().getContextClassLoader(), loggerContext);
     }
 
