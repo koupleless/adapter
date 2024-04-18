@@ -1,11 +1,12 @@
 /*
- * Copyright 2012-2020 the original author or authors.
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.springframework.boot.context.logging;
 
 import java.io.FileNotFoundException;
@@ -97,52 +97,56 @@ import org.springframework.util.StringUtils;
  */
 public class LoggingApplicationListener implements GenericApplicationListener {
 
-    private static final ConfigurationPropertyName LOGGING_LEVEL = ConfigurationPropertyName.of("logging.level");
+    private static final ConfigurationPropertyName           LOGGING_LEVEL                   = ConfigurationPropertyName
+        .of("logging.level");
 
-    private static final ConfigurationPropertyName LOGGING_GROUP = ConfigurationPropertyName.of("logging.group");
+    private static final ConfigurationPropertyName           LOGGING_GROUP                   = ConfigurationPropertyName
+        .of("logging.group");
 
-    private static final Bindable<Map<String, LogLevel>> STRING_LOGLEVEL_MAP = Bindable.mapOf(String.class,
-            LogLevel.class);
+    private static final Bindable<Map<String, LogLevel>>     STRING_LOGLEVEL_MAP             = Bindable
+        .mapOf(String.class, LogLevel.class);
 
-    private static final Bindable<Map<String, List<String>>> STRING_STRINGS_MAP = Bindable
-            .of(ResolvableType.forClassWithGenerics(MultiValueMap.class, String.class, String.class).asMap());
+    private static final Bindable<Map<String, List<String>>> STRING_STRINGS_MAP              = Bindable
+        .of(ResolvableType.forClassWithGenerics(MultiValueMap.class, String.class, String.class)
+            .asMap());
 
     /**
      * The default order for the LoggingApplicationListener.
      */
-    public static final int DEFAULT_ORDER = Ordered.HIGHEST_PRECEDENCE + 20;
+    public static final int                                  DEFAULT_ORDER                   = Ordered.HIGHEST_PRECEDENCE
+                                                                                               + 20;
 
     /**
      * The name of the Spring property that contains a reference to the logging
      * configuration to load.
      */
-    public static final String CONFIG_PROPERTY = "logging.config";
+    public static final String                               CONFIG_PROPERTY                 = "logging.config";
 
     /**
      * The name of the Spring property that controls the registration of a shutdown hook
      * to shut down the logging system when the JVM exits.
      * @see LoggingSystem#getShutdownHandler
      */
-    public static final String REGISTER_SHUTDOWN_HOOK_PROPERTY = "logging.register-shutdown-hook";
+    public static final String                               REGISTER_SHUTDOWN_HOOK_PROPERTY = "logging.register-shutdown-hook";
 
     /**
      * The name of the {@link LoggingSystem} bean.
      */
-    public static final String LOGGING_SYSTEM_BEAN_NAME = "springBootLoggingSystem";
+    public static final String                               LOGGING_SYSTEM_BEAN_NAME        = "springBootLoggingSystem";
 
     /**
      * The name of the {@link LogFile} bean.
      * @since 2.2.0
      */
-    public static final String LOG_FILE_BEAN_NAME = "springBootLogFile";
+    public static final String                               LOG_FILE_BEAN_NAME              = "springBootLogFile";
 
     /**
      * The name of the{@link LoggerGroups} bean.
      * @since 2.2.0
      */
-    public static final String LOGGER_GROUPS_BEAN_NAME = "springBootLoggerGroups";
+    public static final String                               LOGGER_GROUPS_BEAN_NAME         = "springBootLoggerGroups";
 
-    private static final Map<String, List<String>> DEFAULT_GROUP_LOGGERS;
+    private static final Map<String, List<String>>           DEFAULT_GROUP_LOGGERS;
     static {
         MultiValueMap<String, String> loggers = new LinkedMultiValueMap<>();
         loggers.add("web", "org.springframework.core.codec");
@@ -170,27 +174,30 @@ public class LoggingApplicationListener implements GenericApplicationListener {
         SPRING_BOOT_LOGGING_LOGGERS = Collections.unmodifiableMap(loggers);
     }
 
-    private static final Class<?>[] EVENT_TYPES = { ApplicationStartingEvent.class,
-                                                    ApplicationEnvironmentPreparedEvent.class, ApplicationPreparedEvent.class, ContextClosedEvent.class,
-                                                    ApplicationFailedEvent.class };
+    private static final Class<?>[]    EVENT_TYPES            = { ApplicationStartingEvent.class,
+                                                                  ApplicationEnvironmentPreparedEvent.class,
+                                                                  ApplicationPreparedEvent.class,
+                                                                  ContextClosedEvent.class,
+                                                                  ApplicationFailedEvent.class };
 
-    private static final Class<?>[] SOURCE_TYPES = { SpringApplication.class, ApplicationContext.class };
+    private static final Class<?>[]    SOURCE_TYPES           = { SpringApplication.class,
+                                                                  ApplicationContext.class };
 
     private static final AtomicBoolean shutdownHookRegistered = new AtomicBoolean();
 
-    private final Log logger = LogFactory.getLog(getClass());
+    private final Log                  logger                 = LogFactory.getLog(getClass());
 
-    private LoggingSystem loggingSystem;
+    private LoggingSystem              loggingSystem;
 
-    private LogFile logFile;
+    private LogFile                    logFile;
 
-    private LoggerGroups loggerGroups;
+    private LoggerGroups               loggerGroups;
 
-    private int order = DEFAULT_ORDER;
+    private int                        order                  = DEFAULT_ORDER;
 
-    private boolean parseArgs = true;
+    private boolean                    parseArgs              = true;
 
-    private LogLevel springBootLogging = null;
+    private LogLevel                   springBootLogging      = null;
 
     @Override
     public boolean supportsEventType(ResolvableType resolvableType) {
@@ -217,18 +224,14 @@ public class LoggingApplicationListener implements GenericApplicationListener {
     public void onApplicationEvent(ApplicationEvent event) {
         if (event instanceof ApplicationStartingEvent) {
             onApplicationStartingEvent((ApplicationStartingEvent) event);
-        }
-        else if (event instanceof ApplicationEnvironmentPreparedEvent) {
+        } else if (event instanceof ApplicationEnvironmentPreparedEvent) {
             onApplicationEnvironmentPreparedEvent((ApplicationEnvironmentPreparedEvent) event);
-        }
-        else if (event instanceof ApplicationPreparedEvent) {
+        } else if (event instanceof ApplicationPreparedEvent) {
             onApplicationPreparedEvent((ApplicationPreparedEvent) event);
-        }
-        else if (event instanceof ContextClosedEvent
-                && ((ContextClosedEvent) event).getApplicationContext().getParent() == null) {
+        } else if (event instanceof ContextClosedEvent
+                   && ((ContextClosedEvent) event).getApplicationContext().getParent() == null) {
             onContextClosedEvent();
-        }
-        else if (event instanceof ApplicationFailedEvent) {
+        } else if (event instanceof ApplicationFailedEvent) {
             onApplicationFailedEvent();
         }
     }
@@ -246,7 +249,8 @@ public class LoggingApplicationListener implements GenericApplicationListener {
     }
 
     private void onApplicationPreparedEvent(ApplicationPreparedEvent event) {
-        ConfigurableListableBeanFactory beanFactory = event.getApplicationContext().getBeanFactory();
+        ConfigurableListableBeanFactory beanFactory = event.getApplicationContext()
+            .getBeanFactory();
         if (!beanFactory.containsBean(LOGGING_SYSTEM_BEAN_NAME)) {
             beanFactory.registerSingleton(LOGGING_SYSTEM_BEAN_NAME, this.loggingSystem);
         }
@@ -295,7 +299,7 @@ public class LoggingApplicationListener implements GenericApplicationListener {
 
     private LoggingSystemProperties getLoggingSystemProperties(ConfigurableEnvironment environment) {
         return (this.loggingSystem != null) ? this.loggingSystem.getSystemProperties(environment)
-                : new LoggingSystemProperties(environment);
+            : new LoggingSystemProperties(environment);
     }
 
     private void initializeEarlyLoggingLevel(ConfigurableEnvironment environment) {
@@ -314,25 +318,27 @@ public class LoggingApplicationListener implements GenericApplicationListener {
         return (value != null && !value.equals("false"));
     }
 
-    private void initializeSystem(ConfigurableEnvironment environment, LoggingSystem system, LogFile logFile) {
+    private void initializeSystem(ConfigurableEnvironment environment, LoggingSystem system,
+                                  LogFile logFile) {
         String logConfig = StringUtils.trimWhitespace(environment.getProperty(CONFIG_PROPERTY));
         try {
-            LoggingInitializationContext initializationContext = new LoggingInitializationContext(environment);
+            LoggingInitializationContext initializationContext = new LoggingInitializationContext(
+                environment);
             if (ignoreLogConfig(logConfig)) {
                 system.initialize(initializationContext, null, logFile);
-            }
-            else {
+            } else {
                 system.initialize(initializationContext, logConfig, logFile);
             }
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             Throwable exceptionToReport = ex;
-            while (exceptionToReport != null && !(exceptionToReport instanceof FileNotFoundException)) {
+            while (exceptionToReport != null
+                   && !(exceptionToReport instanceof FileNotFoundException)) {
                 exceptionToReport = exceptionToReport.getCause();
             }
             exceptionToReport = (exceptionToReport != null) ? exceptionToReport : ex;
             // NOTE: We can't use the logger here to report the problem
-            System.err.println("Logging system failed to initialize using configuration from '" + logConfig + "'");
+            System.err.println(
+                "Logging system failed to initialize using configuration from '" + logConfig + "'");
             exceptionToReport.printStackTrace(System.err);
             throw new IllegalStateException(ex);
         }
@@ -342,7 +348,8 @@ public class LoggingApplicationListener implements GenericApplicationListener {
         return !StringUtils.hasLength(logConfig) || logConfig.startsWith("-D");
     }
 
-    private void initializeFinalLoggingLevels(ConfigurableEnvironment environment, LoggingSystem system) {
+    private void initializeFinalLoggingLevels(ConfigurableEnvironment environment,
+                                              LoggingSystem system) {
         bindLoggerGroups(environment);
         if (this.springBootLogging != null) {
             initializeSpringBootLogging(system, this.springBootLogging);
@@ -354,9 +361,9 @@ public class LoggingApplicationListener implements GenericApplicationListener {
         Map<String, String> configMap = new ConcurrentHashMap<>();
         Set<String> configKeys = new HashSet<>();
         environment.getPropertySources().stream()
-                .filter(propertySource -> propertySource instanceof EnumerablePropertySource)
-                .forEach(propertySource -> configKeys.addAll(
-                        Arrays.asList(((EnumerablePropertySource<?>) propertySource).getPropertyNames())));
+            .filter(propertySource -> propertySource instanceof EnumerablePropertySource)
+            .forEach(propertySource -> configKeys.addAll(
+                Arrays.asList(((EnumerablePropertySource<?>) propertySource).getPropertyNames())));
 
         configKeys.forEach(key -> {
             try {
@@ -387,7 +394,7 @@ public class LoggingApplicationListener implements GenericApplicationListener {
     protected void initializeSpringBootLogging(LoggingSystem system, LogLevel springBootLogging) {
         BiConsumer<String, LogLevel> configurer = getLogLevelConfigurer(system);
         SPRING_BOOT_LOGGING_LOGGERS.getOrDefault(springBootLogging, Collections.emptyList())
-                .forEach((name) -> configureLogLevel(name, springBootLogging, configurer));
+            .forEach((name) -> configureLogLevel(name, springBootLogging, configurer));
     }
 
     /**
@@ -399,11 +406,13 @@ public class LoggingApplicationListener implements GenericApplicationListener {
     protected void setLogLevels(LoggingSystem system, ConfigurableEnvironment environment) {
         BiConsumer<String, LogLevel> customizer = getLogLevelConfigurer(system);
         Binder binder = Binder.get(environment);
-        Map<String, LogLevel> levels = binder.bind(LOGGING_LEVEL, STRING_LOGLEVEL_MAP).orElseGet(Collections::emptyMap);
+        Map<String, LogLevel> levels = binder.bind(LOGGING_LEVEL, STRING_LOGLEVEL_MAP)
+            .orElseGet(Collections::emptyMap);
         levels.forEach((name, level) -> configureLogLevel(name, level, customizer));
     }
 
-    private void configureLogLevel(String name, LogLevel level, BiConsumer<String, LogLevel> configurer) {
+    private void configureLogLevel(String name, LogLevel level,
+                                   BiConsumer<String, LogLevel> configurer) {
         if (this.loggerGroups != null) {
             LoggerGroup group = this.loggerGroups.get(name);
             if (group != null && group.hasMembers()) {
@@ -419,15 +428,16 @@ public class LoggingApplicationListener implements GenericApplicationListener {
             try {
                 name = name.equalsIgnoreCase(LoggingSystem.ROOT_LOGGER_NAME) ? null : name;
                 system.setLogLevel(name, level);
-            }
-            catch (RuntimeException ex) {
+            } catch (RuntimeException ex) {
                 this.logger.error(LogMessage.format("Cannot set level '%s' for '%s'", level, name));
             }
         };
     }
 
-    private void registerShutdownHookIfNecessary(Environment environment, LoggingSystem loggingSystem) {
-        boolean registerShutdownHook = environment.getProperty(REGISTER_SHUTDOWN_HOOK_PROPERTY, Boolean.class, false);
+    private void registerShutdownHookIfNecessary(Environment environment,
+                                                 LoggingSystem loggingSystem) {
+        boolean registerShutdownHook = environment.getProperty(REGISTER_SHUTDOWN_HOOK_PROPERTY,
+            Boolean.class, false);
         if (registerShutdownHook) {
             Runnable shutdownHandler = loggingSystem.getShutdownHandler();
             if (shutdownHandler != null && shutdownHookRegistered.compareAndSet(false, true)) {
