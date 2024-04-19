@@ -13,6 +13,7 @@ version_compare() {
 
 # Get the current JDK version
 current_jdk=$1
+mvnCommand=$2
 echo "Current JDK version: $current_jdk"
 
 # Define your submodules directory paths
@@ -30,7 +31,17 @@ for submodule in "${submodules[@]}"; do
     version_compare "$current_jdk" "$required_jdk"
     if [[ $? -eq 1 ]]; then
         echo "Building $submodule..."
-        mvn clean install -pl "./$submodule"
+        if [[ "$mvnCommand" = "install" ]]; then
+            mvn clean install -pl "./$submodule"
+        fi
+
+        if [[ "$mvnCommand" = "snapshot" ]]; then
+            mvn --batch-mode deploy -DskipTests -Psnapshot -pl "./$submodule"
+        fi
+
+        if [[ "$mvnCommand" = "release" ]]; then
+            mvn --batch-mode deploy -DskipTests -Prelease -pl "./$submodule"
+        fi
     else
         echo "Skipping $submodule, JDK version requirement not met."
     fi
