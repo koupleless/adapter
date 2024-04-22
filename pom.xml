@@ -86,6 +86,8 @@
         <module>koupleless-adapter-apollo-1.6</module>
         <module>koupleless-adapter-springboot-2.3</module>
         <module>koupleless-adapter-logback</module>
+        <module>koupleless-adapter-logback-spring-starter-3.0</module>
+        <module>koupleless-adapter-logback-spring-starter-3.2</module>
     </modules>
 
     <dependencyManagement>
