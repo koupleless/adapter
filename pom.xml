@@ -78,6 +78,7 @@
     <modules>
         <module>koupleless-adapter-log4j2-spring-starter-2.1</module>
         <module>koupleless-adapter-log4j2-spring-starter-2.7</module>
+        <module>koupleless-adapter-log4j2-spring-starter-3.0</module>
         <module>koupleless-adapter-log4j2-spring-starter-3.2</module>
         <module>koupleless-adapter-dubbo-2.6</module>
         <module>koupleless-adapter-dubbo-2.7</module>

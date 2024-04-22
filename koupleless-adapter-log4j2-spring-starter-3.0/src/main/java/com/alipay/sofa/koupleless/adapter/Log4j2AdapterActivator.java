@@ -24,10 +24,6 @@ import com.alipay.sofa.ark.spi.service.PluginActivator;
  * @since 0.5.5
  */
 public class Log4j2AdapterActivator implements PluginActivator {
-    /**
-     * {groupId=com.alipay.sofa.koupleless, artifactId=koupleless-adapter-apollo-1.6, version=1.0.2-SNAPSHOT, type=jar}
-     * @param context
-     */
     @Override
     public void start(PluginContext context) {
     }
