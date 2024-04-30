@@ -10,7 +10,7 @@
 
     <properties>
         <revision>1.2.0-SNAPSHOT</revision>
-        <koupleless.runime.version>1.1.0</koupleless.runime.version>
+        <koupleless.runime.version>1.2.0-SNAPSHOT</koupleless.runime.version>
         <sofa.ark.version>2.2.9-SNAPSHOT</sofa.ark.version>
         <project.encoding>UTF-8</project.encoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
