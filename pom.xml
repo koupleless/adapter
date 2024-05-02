@@ -9,9 +9,9 @@
     <packaging>pom</packaging>
 
     <properties>
-        <revision>1.2.0-SNAPSHOT</revision>
-        <koupleless.runime.version>1.2.0-SNAPSHOT</koupleless.runime.version>
-        <sofa.ark.version>2.2.9-SNAPSHOT</sofa.ark.version>
+        <revision>1.2.0</revision>
+        <koupleless.runime.version>1.2.0</koupleless.runime.version>
+        <sofa.ark.version>2.2.10</sofa.ark.version>
         <project.encoding>UTF-8</project.encoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <license.maven.plugin>3.0</license.maven.plugin>
