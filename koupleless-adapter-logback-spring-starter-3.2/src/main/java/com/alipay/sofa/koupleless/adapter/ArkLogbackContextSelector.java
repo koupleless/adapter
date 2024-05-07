@@ -50,7 +50,8 @@ public class ArkLogbackContextSelector implements ContextSelector {
 
     private ClassLoader findClassLoader() {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        if (classLoader != null && CONTAINER_CLASS_LOADER.equals(classLoader.getClass().getName())) {
+        if (classLoader != null
+            && CONTAINER_CLASS_LOADER.equals(classLoader.getClass().getName())) {
             return null;
         }
         if (classLoader != null && BIZ_CLASS_LOADER.equals(classLoader.getClass().getName())) {
@@ -136,6 +137,7 @@ public class ArkLogbackContextSelector implements ContextSelector {
 
     @Override
     public List<String> getContextNames() {
-        return CLASS_LOADER_LOGGER_CONTEXT.values().stream().map(LoggerContext::getName).collect(Collectors.toList());
+        return CLASS_LOADER_LOGGER_CONTEXT.values().stream().map(LoggerContext::getName)
+            .collect(Collectors.toList());
     }
 }

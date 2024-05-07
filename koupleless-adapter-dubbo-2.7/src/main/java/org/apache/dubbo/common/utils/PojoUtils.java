@@ -70,12 +70,15 @@ import static org.apache.dubbo.common.utils.ClassUtils.isAssignableFrom;
  */
 public class PojoUtils {
 
-    private static final Logger logger = LoggerFactory.getLogger(PojoUtils.class);
-    private static final ConcurrentMap<Class<?>,ConcurrentMap<String, Method>> NAME_METHODS_CACHE = new ConcurrentHashMap<>();
-    private static final ConcurrentMap<Class<?>, ConcurrentMap<String, Field>> CLASS_FIELD_CACHE = new ConcurrentHashMap<Class<?>, ConcurrentMap<String, Field>>();
-    private static final boolean GENERIC_WITH_CLZ = Boolean.parseBoolean(ConfigUtils.getProperty(CommonConstants.GENERIC_WITH_CLZ_KEY, "true"));
-    private static final List<Class<?>> CLASS_CAN_BE_STRING = Arrays.asList(Byte.class, Short.class, Integer.class,
-            Long.class, Float.class, Double.class, Boolean.class, Character.class);
+    private static final Logger                                                 logger              = LoggerFactory
+        .getLogger(PojoUtils.class);
+    private static final ConcurrentMap<Class<?>, ConcurrentMap<String, Method>> NAME_METHODS_CACHE  = new ConcurrentHashMap<>();
+    private static final ConcurrentMap<Class<?>, ConcurrentMap<String, Field>>  CLASS_FIELD_CACHE   = new ConcurrentHashMap<Class<?>, ConcurrentMap<String, Field>>();
+    private static final boolean                                                GENERIC_WITH_CLZ    = Boolean
+        .parseBoolean(ConfigUtils.getProperty(CommonConstants.GENERIC_WITH_CLZ_KEY, "true"));
+    private static final List<Class<?>>                                         CLASS_CAN_BE_STRING = Arrays
+        .asList(Byte.class, Short.class, Integer.class, Long.class, Float.class, Double.class,
+            Boolean.class, Character.class);
 
     public static Object[] generalize(Object[] objs) {
         Object[] dests = new Object[objs.length];
@@ -122,7 +125,8 @@ public class PojoUtils {
         if (pojo instanceof Enum<?>) {
             return ((Enum<?>) pojo).name();
         }
-        if (pojo.getClass().isArray() && Enum.class.isAssignableFrom(pojo.getClass().getComponentType())) {
+        if (pojo.getClass().isArray()
+            && Enum.class.isAssignableFrom(pojo.getClass().getComponentType())) {
             int len = Array.getLength(pojo);
             String[] values = new String[len];
             for (int i = 0; i < len; i++) {
@@ -158,7 +162,8 @@ public class PojoUtils {
         if (pojo instanceof Collection<?>) {
             Collection<Object> src = (Collection<Object>) pojo;
             int len = src.size();
-            Collection<Object> dest = (pojo instanceof List<?>) ? new ArrayList<Object>(len) : new HashSet<Object>(len);
+            Collection<Object> dest = (pojo instanceof List<?>) ? new ArrayList<Object>(len)
+                : new HashSet<Object>(len);
             history.put(pojo, dest);
             for (Object obj : src) {
                 dest.add(generalize(obj, history));
@@ -183,7 +188,8 @@ public class PojoUtils {
             if (ReflectUtils.isBeanPropertyReadMethod(method)) {
                 ReflectUtils.makeAccessible(method);
                 try {
-                    map.put(ReflectUtils.getPropertyNameFromBeanReadMethod(method), generalize(method.invoke(pojo), history));
+                    map.put(ReflectUtils.getPropertyNameFromBeanReadMethod(method),
+                        generalize(method.invoke(pojo), history));
                 } catch (Exception e) {
                     throw new RuntimeException(e.getMessage(), e);
                 }
@@ -244,7 +250,8 @@ public class PojoUtils {
                 value = map.get(methodName.substring(0, 1).toLowerCase() + methodName.substring(1));
             }
             if (value instanceof Map<?, ?> && !Map.class.isAssignableFrom(method.getReturnType())) {
-                value = realize0((Map<String, Object>) value, method.getReturnType(), null, new IdentityHashMap<Object, Object>());
+                value = realize0((Map<String, Object>) value, method.getReturnType(), null,
+                    new IdentityHashMap<Object, Object>());
             }
             return value;
         }
@@ -256,7 +263,7 @@ public class PojoUtils {
             return new ArrayList<Object>(len);
         }
         if (type.isAssignableFrom(HashSet.class)) {
-            return new HashSet<Object>(Math.max((int) (len/.75f) + 1, 16));
+            return new HashSet<Object>(Math.max((int) (len / .75f) + 1, 16));
         }
         if (!type.isInterface() && !Modifier.isAbstract(type.getModifiers())) {
             try {
@@ -273,11 +280,11 @@ public class PojoUtils {
         int size = src.size();
         Map result = null;
         if (HashMap.class == cl) {
-            result = new HashMap(Math.max((int) (size/.75f) + 1, 16));
+            result = new HashMap(Math.max((int) (size / .75f) + 1, 16));
         } else if (Hashtable.class == cl) {
-            result = new Hashtable(Math.max((int) (size/.75f) + 1, 16));
+            result = new Hashtable(Math.max((int) (size / .75f) + 1, 16));
         } else if (IdentityHashMap.class == cl) {
-            result = new IdentityHashMap((int)(1 + size * 1.1));
+            result = new IdentityHashMap((int) (1 + size * 1.1));
         } else if (LinkedHashMap.class == cl) {
             result = new LinkedHashMap();
         } else if (Properties.class == cl) {
@@ -285,33 +292,36 @@ public class PojoUtils {
         } else if (TreeMap.class == cl) {
             result = new TreeMap();
         } else if (WeakHashMap.class == cl) {
-            return new WeakHashMap(Math.max((int) (size/.75f) + 1, 16));
+            return new WeakHashMap(Math.max((int) (size / .75f) + 1, 16));
         } else if (ConcurrentHashMap.class == cl) {
-            result = new ConcurrentHashMap(Math.max((int) (size/.75f) + 1, 16));
+            result = new ConcurrentHashMap(Math.max((int) (size / .75f) + 1, 16));
         } else if (ConcurrentSkipListMap.class == cl) {
             result = new ConcurrentSkipListMap();
         } else {
             try {
                 result = cl.newInstance();
-            } catch (Exception e) { /* ignore */ }
+            } catch (Exception e) {
+                /* ignore */ }
 
             if (result == null) {
                 try {
                     Constructor<?> constructor = cl.getConstructor(Map.class);
                     result = (Map) constructor.newInstance(Collections.EMPTY_MAP);
-                } catch (Exception e) { /* ignore */ }
+                } catch (Exception e) {
+                    /* ignore */ }
             }
         }
 
         if (result == null) {
-            result = new HashMap<Object, Object>(Math.max((int) (size/.75f) + 1, 16));
+            result = new HashMap<Object, Object>(Math.max((int) (size / .75f) + 1, 16));
         }
 
         return result;
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    private static Object realize0(Object pojo, Class<?> type, Type genericType, final Map<Object, Object> history) {
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    private static Object realize0(Object pojo, Class<?> type, Type genericType,
+                                   final Map<Object, Object> history) {
         if (pojo == null) {
             return null;
         }
@@ -321,9 +331,8 @@ public class PojoUtils {
         }
 
         if (ReflectUtils.isPrimitives(pojo.getClass())
-            && !(type != null && type.isArray()
-            && type.getComponentType().isEnum()
-            && pojo.getClass() == String[].class)) {
+            && !(type != null && type.isArray() && type.getComponentType().isEnum()
+                 && pojo.getClass() == String[].class)) {
             return CompatibleTypeUtils.compatibleTypeConvert(pojo, type);
         }
 
@@ -348,7 +357,8 @@ public class PojoUtils {
                 }
                 return dest;
             } else {
-                Class<?> ctype = (type != null && type.isArray() ? type.getComponentType() : pojo.getClass().getComponentType());
+                Class<?> ctype = (type != null && type.isArray() ? type.getComponentType()
+                    : pojo.getClass().getComponentType());
                 int len = Array.getLength(pojo);
                 Object dest = Array.newInstance(ctype, len);
                 history.put(pojo, dest);
@@ -425,9 +435,9 @@ public class PojoUtils {
                 // fix issue#5939
                 Type mapKeyType = getKeyTypeForMap(map.getClass());
                 Type typeKeyType = getGenericClassByIndex(genericType, 0);
-                boolean typeMismatch = mapKeyType instanceof Class
-                    && typeKeyType instanceof Class
-                    && !typeKeyType.getTypeName().equals(mapKeyType.getTypeName());
+                boolean typeMismatch = mapKeyType instanceof Class && typeKeyType instanceof Class
+                                       && !typeKeyType.getTypeName()
+                                           .equals(mapKeyType.getTypeName());
                 if (typeMismatch) {
                     result = createMap(new HashMap(0));
                 } else {
@@ -455,13 +465,16 @@ public class PojoUtils {
                         valueClazz = entry.getValue() == null ? null : entry.getValue().getClass();
                     }
 
-                    Object key = keyClazz == null ? entry.getKey() : realize0(entry.getKey(), keyClazz, keyType, history);
-                    Object value = valueClazz == null ? entry.getValue() : realize0(entry.getValue(), valueClazz, valueType, history);
+                    Object key = keyClazz == null ? entry.getKey()
+                        : realize0(entry.getKey(), keyClazz, keyType, history);
+                    Object value = valueClazz == null ? entry.getValue()
+                        : realize0(entry.getValue(), valueClazz, valueType, history);
                     result.put(key, value);
                 }
                 return result;
             } else if (type.isInterface()) {
-                Object dest = Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), new Class<?>[]{type}, new PojoInvocationHandler(map));
+                Object dest = Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(),
+                    new Class<?>[] { type }, new PojoInvocationHandler(map));
                 history.put(pojo, dest);
                 return dest;
             } else {
@@ -473,26 +486,35 @@ public class PojoUtils {
                         String name = (String) key;
                         Object value = entry.getValue();
                         if (value != null) {
-                            Method method = getSetterMethod(dest.getClass(), name, value.getClass());
+                            Method method = getSetterMethod(dest.getClass(), name,
+                                value.getClass());
                             if (method != null) {
                                 Type ptype = method.getGenericParameterTypes()[0];
-                                value = realize0(value, method.getParameterTypes()[0], ptype, history);
+                                value = realize0(value, method.getParameterTypes()[0], ptype,
+                                    history);
                                 try {
                                     method.invoke(dest, value);
                                 } catch (Exception e) {
-                                    String exceptionDescription = "Failed to set pojo " + dest.getClass().getSimpleName() + " property " + name
-                                        + " value " + value.getClass() + ", cause: " + e.getMessage();
+                                    String exceptionDescription = "Failed to set pojo "
+                                                                  + dest.getClass().getSimpleName()
+                                                                  + " property " + name + " value "
+                                                                  + value.getClass() + ", cause: "
+                                                                  + e.getMessage();
                                     logger.error(exceptionDescription, e);
                                     throw new RuntimeException(exceptionDescription, e);
                                 }
                             } else {
                                 Field field = getField(dest.getClass(), name);
                                 if (field != null) {
-                                    value = realize0(value, field.getType(), field.getGenericType(), history);
+                                    value = realize0(value, field.getType(), field.getGenericType(),
+                                        history);
                                     try {
                                         field.set(dest, value);
                                     } catch (IllegalAccessException e) {
-                                        String exceptionDescription = "Failed to set field " + name + " of pojo " + dest.getClass().getName() + " : " + e.getMessage();
+                                        String exceptionDescription = "Failed to set field " + name
+                                                                      + " of pojo "
+                                                                      + dest.getClass().getName()
+                                                                      + " : " + e.getMessage();
                                         throw new RuntimeException(exceptionDescription, e);
                                     }
                                 }
@@ -585,9 +607,11 @@ public class PojoUtils {
                     }
                 }
                 ReflectUtils.makeAccessible(constructor);
-                Object[] parameters = Arrays.stream(constructor.getParameterTypes()).map(PojoUtils::getDefaultValue).toArray();
+                Object[] parameters = Arrays.stream(constructor.getParameterTypes())
+                    .map(PojoUtils::getDefaultValue).toArray();
                 return constructor.newInstance(parameters);
-            } catch (InstantiationException | InvocationTargetException | IllegalAccessException e) {
+            } catch (InstantiationException | InvocationTargetException
+                    | IllegalAccessException e) {
                 throw new RuntimeException(e.getMessage(), e);
             }
         }
@@ -641,7 +665,8 @@ public class PojoUtils {
 
     private static Field getField(Class<?> cls, String fieldName) {
         Field result = null;
-        if (CLASS_FIELD_CACHE.containsKey(cls) && CLASS_FIELD_CACHE.get(cls).containsKey(fieldName)) {
+        if (CLASS_FIELD_CACHE.containsKey(cls)
+            && CLASS_FIELD_CACHE.get(cls).containsKey(fieldName)) {
             return CLASS_FIELD_CACHE.get(cls).get(fieldName);
         }
         try {
@@ -649,23 +674,24 @@ public class PojoUtils {
             ReflectUtils.makeAccessible(result);
         } catch (NoSuchFieldException e) {
             for (Field field : cls.getFields()) {
-                if (fieldName.equals(field.getName()) && ReflectUtils.isPublicInstanceField(field)) {
+                if (fieldName.equals(field.getName())
+                    && ReflectUtils.isPublicInstanceField(field)) {
                     result = field;
                     break;
                 }
             }
         }
         if (result != null) {
-            ConcurrentMap<String, Field> fields = CLASS_FIELD_CACHE.computeIfAbsent(cls, k -> new ConcurrentHashMap<>());
+            ConcurrentMap<String, Field> fields = CLASS_FIELD_CACHE.computeIfAbsent(cls,
+                k -> new ConcurrentHashMap<>());
             fields.putIfAbsent(fieldName, result);
         }
         return result;
     }
 
     public static boolean isPojo(Class<?> cls) {
-        return !ReflectUtils.isPrimitives(cls)
-            && !Collection.class.isAssignableFrom(cls)
-            && !Map.class.isAssignableFrom(cls);
+        return !ReflectUtils.isPrimitives(cls) && !Collection.class.isAssignableFrom(cls)
+               && !Map.class.isAssignableFrom(cls);
     }
 
     /**
@@ -677,7 +703,8 @@ public class PojoUtils {
      * @param <T>          the value type
      * @since 2.7.8
      */
-    public static <T> void updatePropertyIfAbsent(Supplier<T> getterMethod, Consumer<T> setterMethod, T newValue) {
+    public static <T> void updatePropertyIfAbsent(Supplier<T> getterMethod,
+                                                  Consumer<T> setterMethod, T newValue) {
         if (newValue != null && getterMethod.get() == null) {
             setterMethod.accept(newValue);
         }
@@ -693,7 +720,8 @@ public class PojoUtils {
      * @throws ReflectiveOperationException if the instance creation is failed
      * @since 2.7.10
      */
-    public static <T> T mapToPojo(Map<String, Object> map, Class<T> cls) throws ReflectiveOperationException {
+    public static <T> T mapToPojo(Map<String, Object> map,
+                                  Class<T> cls) throws ReflectiveOperationException {
         T instance = cls.getDeclaredConstructor().newInstance();
         Map<String, Field> beanPropertyFields = ReflectUtils.getBeanPropertyFields(cls);
         for (Map.Entry<String, Field> entry : beanPropertyFields.entrySet()) {
@@ -712,12 +740,14 @@ public class PojoUtils {
         return instance;
     }
 
-    private static Object getFieldObject(Object mapObject, Type fieldType) throws ReflectiveOperationException {
+    private static Object getFieldObject(Object mapObject,
+                                         Type fieldType) throws ReflectiveOperationException {
         if (fieldType instanceof Class<?>) {
             return convertClassType(mapObject, (Class<?>) fieldType);
         } else if (fieldType instanceof ParameterizedType) {
             return convertParameterizedType(mapObject, (ParameterizedType) fieldType);
-        } else if (fieldType instanceof GenericArrayType || fieldType instanceof TypeVariable<?> || fieldType instanceof WildcardType) {
+        } else if (fieldType instanceof GenericArrayType || fieldType instanceof TypeVariable<?>
+                   || fieldType instanceof WildcardType) {
             // ignore these type currently
             return null;
         } else {
@@ -726,10 +756,12 @@ public class PojoUtils {
     }
 
     @SuppressWarnings("unchecked")
-    private static Object convertClassType(Object mapObject, Class<?> type) throws ReflectiveOperationException {
+    private static Object convertClassType(Object mapObject,
+                                           Class<?> type) throws ReflectiveOperationException {
         if (type.isPrimitive() || isAssignableFrom(type, mapObject.getClass())) {
             return mapObject;
-        } else if (Objects.equals(type, String.class) && CLASS_CAN_BE_STRING.contains(mapObject.getClass())) {
+        } else if (Objects.equals(type, String.class)
+                   && CLASS_CAN_BE_STRING.contains(mapObject.getClass())) {
             // auto convert specified type to string
             return mapObject.toString();
         } else if (mapObject instanceof Map) {
@@ -742,7 +774,8 @@ public class PojoUtils {
     }
 
     @SuppressWarnings("unchecked")
-    private static Object convertParameterizedType(Object mapObject, ParameterizedType type) throws ReflectiveOperationException {
+    private static Object convertParameterizedType(Object mapObject,
+                                                   ParameterizedType type) throws ReflectiveOperationException {
         Type rawType = type.getRawType();
         if (!isAssignableFrom((Class<?>) rawType, mapObject.getClass())) {
             return null;
@@ -750,7 +783,8 @@ public class PojoUtils {
 
         Type[] actualTypeArguments = type.getActualTypeArguments();
         if (isAssignableFrom(Map.class, (Class<?>) rawType)) {
-            Map<Object, Object> map = (Map<Object, Object>) mapObject.getClass().getDeclaredConstructor().newInstance();
+            Map<Object, Object> map = (Map<Object, Object>) mapObject.getClass()
+                .getDeclaredConstructor().newInstance();
             for (Map.Entry<Object, Object> entry : ((Map<Object, Object>) mapObject).entrySet()) {
                 Object key = getFieldObject(entry.getKey(), actualTypeArguments[0]);
                 Object value = getFieldObject(entry.getValue(), actualTypeArguments[1]);
@@ -759,7 +793,8 @@ public class PojoUtils {
 
             return map;
         } else if (isAssignableFrom(Collection.class, (Class<?>) rawType)) {
-            Collection<Object> collection = (Collection<Object>) mapObject.getClass().getDeclaredConstructor().newInstance();
+            Collection<Object> collection = (Collection<Object>) mapObject.getClass()
+                .getDeclaredConstructor().newInstance();
             for (Object m : (Iterable<?>) mapObject) {
                 Object ele = getFieldObject(m, actualTypeArguments[0]);
                 collection.add(ele);

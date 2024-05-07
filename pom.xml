@@ -32,7 +32,6 @@
 
 
         <!-- the following property should be  -->
-        <spring.boot.version>SHOULD_OVERRIDE</spring.boot.version>
         <java.version>SHOULD_OVERRIDE</java.version>
     </properties>
 
