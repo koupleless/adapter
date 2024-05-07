@@ -11,7 +11,6 @@
     <properties>
         <revision>1.2.0</revision>
         <koupleless.runime.version>1.2.0</koupleless.runime.version>
-        <sofa.ark.version>2.2.10</sofa.ark.version>
         <project.encoding>UTF-8</project.encoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <license.maven.plugin>3.0</license.maven.plugin>
@@ -133,40 +132,6 @@
                 <artifactId>koupleless-base-plugin</artifactId>
                 <version>${koupleless.runime.version}</version>
             </dependency>
-
-            <!--  sofa-ark begin  -->
-            <dependency>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>sofa-ark-all</artifactId>
-                <version>${sofa.ark.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>ch.qos.logback</groupId>
-                        <artifactId>logback-core</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>ch.qos.logback</groupId>
-                        <artifactId>logback-classic</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>sofa-ark-spi</artifactId>
-                <version>${sofa.ark.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>sofa-ark-api</artifactId>
-                <version>${sofa.ark.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.alipay.sofa</groupId>
-                <artifactId>sofa-ark-springboot-starter</artifactId>
-                <version>${sofa.ark.version}</version>
-            </dependency>
-            <!--  sofa-ark end  -->
 
             <dependency>
                 <groupId>com.google.inject</groupId>
