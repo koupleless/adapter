@@ -41,13 +41,13 @@ public class LogbackServiceProvider implements SLF4JServiceProvider {
      * The value of this field is modified with each major release.
      */
     // to avoid constant folding by the compiler, this field must *not* be final
-    public static String                      REQUESTED_API_VERSION = "2.0.99";         // !final
+    public static String                      REQUESTED_API_VERSION = "2.0.99";                  // !final
 
     private LoggerContext                     defaultLoggerContext;
     private IMarkerFactory                    markerFactory;
     private LogbackMDCAdapter                 mdcAdapter;
     private final ContextSelectorStaticBinder contextSelectorBinder = ContextSelectorStaticBinder
-                                                                        .getSingleton();
+        .getSingleton();
     private static Object                     KEY                   = new Object();
     private volatile boolean                  initialized           = false;
 
@@ -89,8 +89,8 @@ public class LogbackServiceProvider implements SLF4JServiceProvider {
         }
 
         if (contextSelectorBinder.getContextSelector() == null) {
-            throw new IllegalStateException("contextSelector cannot be null. See also "
-                                            + NULL_CS_URL);
+            throw new IllegalStateException(
+                "contextSelector cannot be null. See also " + NULL_CS_URL);
         }
         return contextSelectorBinder.getContextSelector().getLoggerContext();
     }
