@@ -5,7 +5,7 @@
 package com.alipay.sofa.koupleless.common;
 
 import com.alipay.sofa.koupleless.common.util.ClassUtil;
-import com.alipay.sofa.koupleless.common.api.KouplelessScheduledExecutorService;
+import com.alipay.sofa.koupleless.plugin.concurrent.KouplelessScheduledExecutorService;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 import java.util.concurrent.ExecutorService;

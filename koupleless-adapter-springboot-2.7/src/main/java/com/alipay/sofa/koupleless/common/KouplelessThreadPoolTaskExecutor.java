@@ -2,7 +2,7 @@ package com.alipay.sofa.koupleless.common;
 
 
 import com.alipay.sofa.koupleless.common.util.ClassUtil;
-import com.alipay.sofa.koupleless.common.api.KouplelessExecutorService;
+import com.alipay.sofa.koupleless.plugin.concurrent.KouplelessExecutorService;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.concurrent.ExecutorService;
