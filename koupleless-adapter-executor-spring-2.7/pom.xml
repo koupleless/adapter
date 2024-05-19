@@ -10,11 +10,11 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>koupleless-adapter-springboot-2.3</artifactId>
+    <artifactId>koupleless-adapter-executor-spring-2.7</artifactId>
     <version>${revision}</version>
 
     <properties>
-        <spring.boot.version>2.3.5.RELEASE</spring.boot.version>
+        <spring.boot.version>2.7.0</spring.boot.version>
         <java.version>1.8</java.version>
     </properties>
 
@@ -35,10 +35,9 @@
 
         <dependency>
             <groupId>com.alipay.sofa.koupleless</groupId>
-            <artifactId>koupleless-common</artifactId>
+            <artifactId>koupleless-base-plugin</artifactId>
             <version>${revision}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
-
 </project>

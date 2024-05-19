@@ -88,8 +88,10 @@
         <module>koupleless-adapter-logback</module>
         <module>koupleless-adapter-logback-spring-starter-3.0</module>
         <module>koupleless-adapter-logback-spring-starter-3.2</module>
-        <module>koupleless-adapter-springboot-2.7</module>
-        <module>koupleless-adapter-springboot-2.4.6</module>
+        <module>koupleless-adapter-executor-spring-2.7</module>
+        <module>koupleless-adapter-scheduler-spring-2.4.6-2.7</module>
+        <module>koupleless-adapter-executorservice-spring-2.3-2.6</module>
+        <module>koupleless-adapter-scheduler-spring-2.3-2.4.5</module>
     </modules>
 
     <dependencyManagement>
