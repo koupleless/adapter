@@ -11,6 +11,10 @@
     </parent>
     <artifactId>koupleless-adapter-dubbo-3.2</artifactId>
 
+    <properties>
+        <java.version>1.8</java.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.apache.dubbo</groupId>
