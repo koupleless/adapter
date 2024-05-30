@@ -10,7 +10,7 @@ import org.apache.dubbo.rpc.model.ModuleModel;
 import org.apache.dubbo.rpc.model.ScopeModelInitializer;
 
 /**
- * @
+ * requires dubbo-common>=3.0.3
  * @author lianglipeng.llp@alibaba-inc.com
  * @version 1.2.1
  */
