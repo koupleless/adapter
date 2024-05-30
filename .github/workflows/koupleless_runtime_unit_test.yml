@@ -43,61 +43,39 @@ jobs:
       - name: Print Maven Modules
         run: |
           echo "Print Maven Modules"
-          modules=${{ join(fromJSON(steps.find-maven-modules.outputs.modules-list), ' ') }}
+          modules=(${{ join(fromJSON(steps.find-maven-modules.outputs.modules-list), ' ') }})
           for module in ${modules[@]}; do
             echo "Found Maven Module: ${module}"
           done
-        shell: bash
+
+      - name: Install SDKMAN
+        run: |
+          curl -s "https://get.sdkman.io" | bash
+          source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+      # 使用 SDKMAN 安装需要的所有 JDK 版本
+      - name: Install JDKs with SDKMAN
+        run: |
+          source "$HOME/.sdkman/bin/sdkman-init.sh"
+          yes | sdk install java 8.0.412-tem -y
+          yes | sdk install java 11.0.23-tem -y
+          yes | sdk install java 17.0.11-tem -y
+          sdk list java
 
       - name: Determine JDK versions for modules
         id: get-jdk-versions
         run: |
           # 创建一个映射来存储模块名到 JDK 版本的映射
-          declare -A jdk_versions
-          modules=${{ fromJSON(steps.find-maven-modules.outputs.modules-list) }}
+          source "$HOME/.sdkman/bin/sdkman-init.sh"
+          declare -A jdk_installed_map=(["1.8"]="8.0.412-tem" ["11"]="11.0.23-tem" ["17"]="17.0.11-tem")
+          modules=(${{ join(fromJSON(steps.find-maven-modules.outputs.modules-list), ' ') }})
           for module in "${modules[@]}"; do
             # 读取模块中的 pom.xml 来确定 JDK 版本
             jdk_version=$(grep -m 1 '<java.version>' $module/pom.xml | sed 's/<[^>]*>//g' | xargs)
             echo "${module} JDK version: ${jdk_version}"
             # 将模块与其 JDK 版本添加到映射中
-            jdk_versions[$module]=$jdk_version
-          done
-          # 将映射转换为 JSON 并输出
-          echo "jdk_versions=$(echo ${jdk_versions[@]} | jq -R 'split(" ") | map({(.): input}) | add')"
-          echo "jdk_versions=$(echo ${jdk_versions[@]} | jq -R 'split(" ") | map({(.): input}) | add')" >> $GITHUB_OUTPUT
-          echo "modules=$(echo ${modules[@]} | jq -R 'split(" "))'" >> $GITHUB_OUTPUT
-          echo "Outputs set."
-
-      - name: Print JDK versions
-        run: |
-          modules=${{ fromJson(steps.get-jdk-versions.outputs.modules) }}
-          jdk_versions=${{ fromJson(steps.get-jdk-versions.outputs.jdk_versions) }}
-          for module in "${modules[@]}"; do
-             echo "Module: $module, JDK Version: ${jdk_versions[$module]}"
-          done
-
-      - name: Install SDKMAN
-        run: |
           
-
-      - name: Run tests for each module
-        run: |
-          modules=${{ fromJson(steps.get-jdk-versions.outputs.modules) }}
-          jdk_versions=${{ fromJson(steps.get-jdk-versions.outputs.jdk_versions) }}
-          find . -name pom.xml -maxdepth 2 -not -path "./pom.xml" -exec dirname {} \; | xargs -I {} cp HEADER LICENSE Formatter.xml {}
-          for module in "${modules[@]}"; do
-            jdk_version=${jdk_versions[$module]}
-            echo "Running tests for module $module with JDK version $jdk_version"
-            # 设置 JDK
-            echo "Set up JDK $jdk_version"
-            wget https://github.com/AdoptOpenJDK/openjdk${jdk_version}-upstream-binaries/releases/latest/download/OpenJDK${jdk_version}U-jdk_x64_linux_hotspot_*.tar.gz
-            tar -xzf OpenJDK${jdk_version}U-jdk_x64_linux_hotspot_*.tar.gz
-            export JAVA_HOME=$PWD/jdk-$(ls | grep "jdk" | head -n 1)
-            export PATH=$JAVA_HOME/bin:$PATH
-            java -version
-            # 运行单元测试
-            
+            sdk use java ${jdk_installed_map[$jdk_version]}
             mvn clean package test -pl $module -Dmaven.javadoc.skip=true -B -U
             echo "Tests completed for module $module"
           done
-        shell: bash
