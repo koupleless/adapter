@@ -12,7 +12,7 @@
     <artifactId>koupleless-adapter-dubbo-3.2</artifactId>
 
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>17</java.version>
     </properties>
 
     <dependencies>
