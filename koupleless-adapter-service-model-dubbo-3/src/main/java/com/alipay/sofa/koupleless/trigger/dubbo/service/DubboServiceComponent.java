@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.koupleless.trigger.dubbo;
+package com.alipay.sofa.koupleless.trigger.dubbo.service;
 
 import com.alipay.sofa.koupleless.common.service.AbstractServiceComponent;
 import com.alipay.sofa.koupleless.common.service.ServiceState;
 import lombok.Builder;
 
-import static com.alipay.sofa.koupleless.trigger.dubbo.KouplelessDubboServiceConstants.PROTOCOL;
+import static com.alipay.sofa.koupleless.trigger.dubbo.service.KouplelessDubboServiceConstants.PROTOCOL;
 
 /**
  * @author lianglipeng.llp@alibaba-inc.com

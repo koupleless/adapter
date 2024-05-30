@@ -23,6 +23,13 @@
             <version>3.0.1</version>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo-common</artifactId>
+            <version>3.0.3</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>com.alipay.sofa.koupleless</groupId>
             <artifactId>koupleless-common</artifactId>

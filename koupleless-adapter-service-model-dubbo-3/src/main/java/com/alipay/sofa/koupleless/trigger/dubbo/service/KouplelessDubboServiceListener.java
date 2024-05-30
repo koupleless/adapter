@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.koupleless.trigger.dubbo;
+package com.alipay.sofa.koupleless.trigger.dubbo.service;
 
 import com.alipay.sofa.koupleless.common.BizRuntimeContext;
 import com.alipay.sofa.koupleless.common.BizRuntimeContextRegistry;
@@ -27,7 +27,7 @@ import org.apache.dubbo.rpc.model.ServiceMetadata;
 
 import static com.alipay.sofa.koupleless.common.exception.ErrorCodes.ServiceManager.E200001;
 import static com.alipay.sofa.koupleless.common.exception.ErrorCodes.SpringContextManager.E100002;
-import static com.alipay.sofa.koupleless.trigger.dubbo.KouplelessDubboServiceConstants.PROTOCOL;
+import static com.alipay.sofa.koupleless.trigger.dubbo.service.KouplelessDubboServiceConstants.PROTOCOL;
 import static com.alipay.sofa.koupleless.trigger.dubbo.KouplelessDubboUtils.buildServiceIdentifier;
 import static com.alipay.sofa.koupleless.trigger.dubbo.KouplelessDubboUtils.parseDubboProtocol;
 
