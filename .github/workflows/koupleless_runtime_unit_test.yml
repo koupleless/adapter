@@ -17,7 +17,7 @@ env:
   WORK_DIR: .
 
 jobs:
-  unit-test-for-jdk8:
+  unit-test-for-multi-version-jdk:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -79,3 +79,9 @@ jobs:
             mvn clean package test -pl $module -Dmaven.javadoc.skip=true -B -U
             echo "Tests completed for module $module"
           done
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v4.0.1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: koupleless/adapter
