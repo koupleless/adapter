@@ -62,7 +62,7 @@ jobs:
           yes | sdk install java 17.0.11-tem -y
           sdk list java
 
-      - name: Determine JDK versions for modules
+      - name: Run test for modules
         id: get-jdk-versions
         run: |
           # 创建一个映射来存储模块名到 JDK 版本的映射
