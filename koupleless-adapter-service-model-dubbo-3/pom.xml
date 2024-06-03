@@ -9,7 +9,8 @@
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>koupleless-adapter-dubbo-3.2</artifactId>
+
+    <artifactId>koupleless-adapter-service-model-dubbo-3</artifactId>
 
     <properties>
         <java.version>17</java.version>
@@ -18,8 +19,21 @@
     <dependencies>
         <dependency>
             <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo</artifactId>
+            <version>3.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
             <artifactId>dubbo-common</artifactId>
-            <version>3.2.11</version>
+            <version>3.0.3</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.alipay.sofa.koupleless</groupId>
+            <artifactId>koupleless-common</artifactId>
+            <version>1.2.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

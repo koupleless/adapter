@@ -17,7 +17,7 @@ env:
   WORK_DIR: .
 
 jobs:
-  unit-test-for-jdk8:
+  unit-test-for-multi-version-jdk:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -28,10 +28,60 @@ jobs:
           java-version: 8
           cache: maven
 
-      - name: Test
-        run: mvn clean install -DskipTests -Dmaven.javadoc.skip=true -B -U
-          && sh ./check_format.sh
-          && mvn test
+      - name: Find Maven modules
+        id: find-maven-modules
+        run: |
+          echo "Finding Maven Modules"
+          # 定位 pom.xml 文件，通过 grep 排除掉根目录下的 pom.xml
+          modules=$(find . -name pom.xml -maxdepth 2 -not -path "./pom.xml" -exec dirname {} \;)
+          echo "$modules"
+          # 使用 jq 将 shell 数组转换成 JSON 数组供后续步骤使用
+          modules_in_json=$(echo $modules | jq -R -s -c 'split("\n") | map(select(length > 0))')
+          echo "$modules_in_json"
+          echo "modules-list=$modules_in_json" >> $GITHUB_OUTPUT
 
-      - name: upload coverage reports to Codecov with github action
-        uses: codecov/codecov-action@v3
+      - name: Print Maven Modules
+        run: |
+          echo "Print Maven Modules"
+          modules=(${{ join(fromJSON(steps.find-maven-modules.outputs.modules-list), ' ') }})
+          for module in ${modules[@]}; do
+            echo "Found Maven Module: ${module}"
+          done
+
+      - name: Install SDKMAN
+        run: |
+          curl -s "https://get.sdkman.io" | bash
+          source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+      # 使用 SDKMAN 安装需要的所有 JDK 版本
+      - name: Install JDKs with SDKMAN
+        run: |
+          source "$HOME/.sdkman/bin/sdkman-init.sh"
+          yes | sdk install java 8.0.412-tem -y
+          yes | sdk install java 11.0.23-tem -y
+          yes | sdk install java 17.0.11-tem -y
+          sdk list java
+
+      - name: Run test for modules
+        id: get-jdk-versions
+        run: |
+          # 创建一个映射来存储模块名到 JDK 版本的映射
+          source "$HOME/.sdkman/bin/sdkman-init.sh"
+          declare -A jdk_installed_map=(["1.8"]="8.0.412-tem" ["11"]="11.0.23-tem" ["17"]="17.0.11-tem")
+          modules=(${{ join(fromJSON(steps.find-maven-modules.outputs.modules-list), ' ') }})
+          for module in "${modules[@]}"; do
+            # 读取模块中的 pom.xml 来确定 JDK 版本
+            jdk_version=$(grep -m 1 '<java.version>' $module/pom.xml | sed 's/<[^>]*>//g' | xargs)
+            echo "${module} JDK version: ${jdk_version}"
+            # 将模块与其 JDK 版本添加到映射中
+          
+            sdk use java ${jdk_installed_map[$jdk_version]}
+            mvn clean package test -pl $module -Dmaven.javadoc.skip=true -B -U
+            echo "Tests completed for module $module"
+          done
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v4.0.1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: koupleless/adapter
