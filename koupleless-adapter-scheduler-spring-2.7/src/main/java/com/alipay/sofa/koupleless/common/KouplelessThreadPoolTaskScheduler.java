@@ -16,7 +16,7 @@
  */
 package com.alipay.sofa.koupleless.common;
 
-import com.alipay.sofa.koupleless.common.util.ClassUtil;
+import com.alipay.sofa.koupleless.common.util.ReflectionUtils;
 import com.alipay.sofa.koupleless.plugin.concurrent.KouplelessScheduledExecutorService;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
@@ -39,7 +39,7 @@ public class KouplelessThreadPoolTaskScheduler extends ThreadPoolTaskScheduler {
             threadFactory, rejectedExecutionHandler);
         ScheduledExecutorService executor = new KouplelessScheduledExecutorService(
             scheduledExecutor);
-        ClassUtil.setField("scheduledExecutor", this, executor);
+        ReflectionUtils.setField("scheduledExecutor", this, executor);
         return executor;
     }
 }
