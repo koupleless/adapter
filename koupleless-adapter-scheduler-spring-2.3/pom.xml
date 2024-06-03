@@ -10,8 +10,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-
-    <artifactId>koupleless-adapter-scheduler-spring-2.3-2.4.5</artifactId>
+    <artifactId>koupleless-adapter-scheduler-spring-2.3</artifactId>
 
     <properties>
         <spring.boot.version>2.3.5.RELEASE</spring.boot.version>

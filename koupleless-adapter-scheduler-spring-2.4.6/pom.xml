@@ -11,7 +11,7 @@
     </parent>
 
 
-    <artifactId>koupleless-adapter-scheduler-spring-2.4.6-2.7</artifactId>
+    <artifactId>koupleless-adapter-scheduler-spring-2.4.6</artifactId>
     <version>${revision}</version>
 
     <properties>

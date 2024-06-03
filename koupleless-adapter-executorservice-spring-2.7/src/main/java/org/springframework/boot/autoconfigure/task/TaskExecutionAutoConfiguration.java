@@ -16,8 +16,6 @@
  */
 package org.springframework.boot.autoconfigure.task;
 
-import java.util.concurrent.Executor;
-
 import com.alipay.sofa.koupleless.common.KouplelessThreadPoolTaskExecutor;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -34,6 +32,8 @@ import org.springframework.core.task.TaskDecorator;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.annotation.AsyncAnnotationBeanPostProcessor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+
+import java.util.concurrent.Executor;
 
 /**
  * {@link EnableAutoConfiguration Auto-configuration} for {@link TaskExecutor}.
