@@ -19,6 +19,7 @@
         <maven.source.plugin>3.0.0</maven.source.plugin>
         <maven.javadoc.plugin>3.2.0</maven.javadoc.plugin>
         <maven.staging.plugin>1.6.13</maven.staging.plugin>
+        <maven.shade.plugin>3.2.4</maven.shade.plugin>
         <maven.gpg.pluign>1.6</maven.gpg.pluign>
         <jacoco.maven.plugin>0.8.11</jacoco.maven.plugin>
         <maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>
@@ -95,7 +96,9 @@
 
         <module>koupleless-adapter-logback-spring-starter-3.0</module>
         <module>koupleless-adapter-logback-spring-starter-3.2</module>
-        <module>koupleless-adapter-service-model-dubbo-3</module>
+
+<!--        common feature jar for adapters -->
+        <module>features/dubbo3-service-model</module>
     </modules>
 
     <dependencyManagement>

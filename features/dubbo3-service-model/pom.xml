@@ -7,13 +7,13 @@
         <groupId>com.alipay.sofa.koupleless</groupId>
         <artifactId>koupleless-adapter</artifactId>
         <version>${revision}</version>
-        <relativePath>../pom.xml</relativePath>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>koupleless-adapter-service-model-dubbo-3</artifactId>
+    <artifactId>dubbo3-service-model</artifactId>
 
     <properties>
-        <java.version>17</java.version>
+        <java.version>1.8</java.version>
     </properties>
 
     <dependencies>

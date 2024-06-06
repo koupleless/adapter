@@ -32,7 +32,7 @@ for submodule in "${submodules[@]}"; do
     if [[ $? -eq 1 ]]; then
         echo "Building $submodule..."
         if [[ "$mvnCommand" = "install" ]]; then
-            mvn clean install -pl "./$submodule"
+            mvn clean install -pl "./$submodule" -am -amd
         fi
 
         if [[ "$mvnCommand" = "snapshot" ]]; then
