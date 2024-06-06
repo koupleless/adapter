@@ -25,7 +25,7 @@
 
         <dependency>
             <groupId>com.alipay.sofa.koupleless</groupId>
-            <artifactId>koupleless-adapter-dubbo-feature-service-model-3</artifactId>
+            <artifactId>dubbo3-service-model</artifactId>
             <version>${revision}</version>
         </dependency>
     </dependencies>

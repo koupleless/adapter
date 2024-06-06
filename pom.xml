@@ -98,7 +98,7 @@
         <module>koupleless-adapter-logback-spring-starter-3.2</module>
 
 <!--        common feature jar for adapters -->
-        <module>features/koupleless-adapter-dubbo-feature-service-model-3</module>
+        <module>features/dubbo3-service-model</module>
     </modules>
 
     <dependencyManagement>
