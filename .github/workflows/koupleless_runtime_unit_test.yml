@@ -76,7 +76,7 @@ jobs:
             # 将模块与其 JDK 版本添加到映射中
           
             sdk use java ${jdk_installed_map[$jdk_version]}
-            mvn clean package test -pl $module -Dmaven.javadoc.skip=true -B -U
+            mvn clean package test -pl $module -am -amd -Dmaven.javadoc.skip=true -B -U
             echo "Tests completed for module $module"
           done
 
