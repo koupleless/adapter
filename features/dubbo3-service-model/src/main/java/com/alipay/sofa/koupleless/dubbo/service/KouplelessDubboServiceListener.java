@@ -14,22 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.koupleless.trigger.dubbo.service;
+package com.alipay.sofa.koupleless.dubbo.service;
 
 import com.alipay.sofa.koupleless.common.BizRuntimeContext;
 import com.alipay.sofa.koupleless.common.BizRuntimeContextRegistry;
 import com.alipay.sofa.koupleless.common.exception.BizRuntimeException;
 import com.alipay.sofa.koupleless.common.service.AbstractServiceComponent;
 import com.alipay.sofa.koupleless.common.service.ServiceState;
+import com.alipay.sofa.koupleless.dubbo.KouplelessDubboUtils;
 import org.apache.dubbo.config.ServiceConfig;
 import org.apache.dubbo.config.ServiceListener;
 import org.apache.dubbo.rpc.model.ServiceMetadata;
 
 import static com.alipay.sofa.koupleless.common.exception.ErrorCodes.ServiceManager.E200001;
 import static com.alipay.sofa.koupleless.common.exception.ErrorCodes.SpringContextManager.E100002;
-import static com.alipay.sofa.koupleless.trigger.dubbo.service.KouplelessDubboServiceConstants.PROTOCOL;
-import static com.alipay.sofa.koupleless.trigger.dubbo.KouplelessDubboUtils.buildServiceIdentifier;
-import static com.alipay.sofa.koupleless.trigger.dubbo.KouplelessDubboUtils.parseDubboProtocol;
+import static com.alipay.sofa.koupleless.dubbo.service.KouplelessDubboServiceConstants.PROTOCOL;
 
 /**
  * @author lianglipeng.llp@alibaba-inc.com
@@ -48,7 +47,8 @@ public class KouplelessDubboServiceListener implements ServiceListener {
         ServiceMetadata serviceMetadata = sc.getServiceMetadata();
         Object target = serviceMetadata.getTarget();
         DubboServiceComponent dubboServiceComponent = DubboServiceComponent.builder()
-            .dubboProtocol(parseDubboProtocol(sc)).identifier(buildServiceIdentifier(sc))
+            .dubboProtocol(KouplelessDubboUtils.parseDubboProtocol(sc)).identifier(
+                        KouplelessDubboUtils.buildServiceIdentifier(sc))
             .bean(target).beanClass(target.getClass())
             .interfaceType(serviceMetadata.getServiceType()).metaData(serviceMetadata)
             .state(ServiceState.EXPORTED).build();
@@ -63,10 +63,10 @@ public class KouplelessDubboServiceListener implements ServiceListener {
             throw new BizRuntimeException(E100002, "biz runtime context is null");
         }
         AbstractServiceComponent component = bizRuntimeContext.getServiceComponent(PROTOCOL,
-            buildServiceIdentifier(sc));
+            KouplelessDubboUtils.buildServiceIdentifier(sc));
         if (component == null) {
             throw new BizRuntimeException(E200001,
-                "service not found:" + buildServiceIdentifier(sc));
+                "service not found:" + KouplelessDubboUtils.buildServiceIdentifier(sc));
         }
         component.setServiceState(ServiceState.UNEXPORTED);
         bizRuntimeContext.unregisterService(component);

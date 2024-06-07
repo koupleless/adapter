@@ -14,21 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.koupleless.trigger.dubbo;
-
-import org.apache.dubbo.config.ServiceConfig;
+package com.alipay.sofa.koupleless.dubbo.service;
 
 /**
  * @author lianglipeng.llp@alibaba-inc.com
- * @version $Id: KouplelessDubboUtils.java, v 0.1 2024年05月20日 14:35 立蓬 Exp $
+ * @version $Id: KouplelessServiceConstants.java, v 0.1 2024年05月20日 14:23 立蓬 Exp $
  */
-public class KouplelessDubboUtils {
-
-    public static String parseDubboProtocol(ServiceConfig sc) {
-        return sc.getProtocol() == null ? "unknown" : sc.getProtocol().getName();
-    }
-
-    public static String buildServiceIdentifier(ServiceConfig sc) {
-        return parseDubboProtocol(sc) + ":" + sc.getServiceMetadata().getServiceKey();
-    }
+public class KouplelessDubboServiceConstants {
+    public static final String PROTOCOL = "dubbo";
 }
