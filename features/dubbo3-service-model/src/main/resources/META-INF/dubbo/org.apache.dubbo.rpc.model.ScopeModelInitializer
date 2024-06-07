@@ -1,1 +1,1 @@
-classloaderScopeModelInitializer=com.alipay.sofa.koupleless.trigger.dubbo.ClassloaderScopeModelInitializer
+classloaderScopeModelInitializer=com.alipay.sofa.koupleless.dubbo.ClassloaderScopeModelInitializer

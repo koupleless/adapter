@@ -14,12 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.koupleless.trigger.dubbo.service;
+package com.alipay.sofa.koupleless.dubbo;
+
+import org.apache.dubbo.rpc.model.ApplicationModel;
+import org.apache.dubbo.rpc.model.FrameworkModel;
+import org.apache.dubbo.rpc.model.ModuleModel;
+import org.apache.dubbo.rpc.model.ScopeModelInitializer;
 
 /**
+ * requires dubbo-common>=3.0.3
  * @author lianglipeng.llp@alibaba-inc.com
- * @version $Id: KouplelessServiceConstants.java, v 0.1 2024年05月20日 14:23 立蓬 Exp $
+ * @version 1.2.1
  */
-public class KouplelessDubboServiceConstants {
-    public static final String PROTOCOL = "dubbo";
+public class ClassloaderScopeModelInitializer implements ScopeModelInitializer {
+    @Override
+    public void initializeFrameworkModel(FrameworkModel frameworkModel) {
+
+    }
+
+    @Override
+    public void initializeApplicationModel(ApplicationModel applicationModel) {
+
+    }
+
+    @Override
+    public void initializeModuleModel(ModuleModel moduleModel) {
+        moduleModel.addClassLoader(Thread.currentThread().getContextClassLoader());
+    }
 }
