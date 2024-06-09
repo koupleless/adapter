@@ -13,6 +13,8 @@
 
     <properties>
         <java.version>17</java.version>
+        <!-- skip deploy parent bundle -->
+        <maven.deploy.skip>false</maven.deploy.skip>
     </properties>
 
     <dependencies>
