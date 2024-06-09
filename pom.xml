@@ -29,10 +29,8 @@
         <guava.version>32.1.3-jre</guava.version>
         <fastjson.version>1.2.83</fastjson.version>
         <hessian.version>4.0.66</hessian.version>
-
-
-        <!-- the following property should be  -->
-        <java.version>SHOULD_OVERRIDE</java.version>
+        <!-- skip deploy parent bundle -->
+        <maven.deploy.skip>true</maven.deploy.skip>
     </properties>
 
     <name>${project.groupId}:${project.artifactId}</name>
