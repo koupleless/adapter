@@ -85,6 +85,7 @@
         <module>koupleless-adapter-apollo-1.6</module>
         <module>koupleless-adapter-springboot-2.3</module>
         <module>koupleless-adapter-logback</module>
+        <module>koupleless-adapter-rocketmq-4.4</module>
 
 <!--        jdk17       -->
         <module>koupleless-adapter-log4j2-spring-starter-3.0</module>
