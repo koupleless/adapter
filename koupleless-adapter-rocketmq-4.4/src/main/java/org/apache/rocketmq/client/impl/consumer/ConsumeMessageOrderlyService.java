@@ -49,7 +49,9 @@ public class ConsumeMessageOrderlyService implements ConsumeMessageService {
     private final MessageListenerOrderly    messageListener;
     private final BlockingQueue<Runnable>   consumeRequestQueue;
     private final ThreadPoolExecutor        consumeExecutor;
+    // koupleless-adapter patch begin
     private final ClassLoader               consumeBizClassLoader;
+    // koupleless-adapter patch end
     private final String                    consumerGroup;
     private final MessageQueueLock          messageQueueLock              = new MessageQueueLock();
     private final ScheduledExecutorService  scheduledExecutorService;
@@ -64,7 +66,9 @@ public class ConsumeMessageOrderlyService implements ConsumeMessageService {
         this.consumerGroup = this.defaultMQPushConsumer.getConsumerGroup();
         this.consumeRequestQueue = new LinkedBlockingQueue<Runnable>();
 
+        // koupleless-adapter patch begin
         this.consumeBizClassLoader = Thread.currentThread().getContextClassLoader();
+        // koupleless-adapter patch end
         this.consumeExecutor = new ThreadPoolExecutor(
             this.defaultMQPushConsumer.getConsumeThreadMin(),
             this.defaultMQPushConsumer.getConsumeThreadMax(), 1000 * 60, TimeUnit.MILLISECONDS,
@@ -183,8 +187,10 @@ public class ConsumeMessageOrderlyService implements ConsumeMessageService {
                                      final boolean dispathToConsume) {
         if (dispathToConsume) {
             ConsumeRequest consumeRequest = new ConsumeRequest(processQueue, messageQueue);
+            // koupleless-adapter patch begin
             SwitchTCCLUtil.doSwitchTCCLAndRun(this.consumeBizClassLoader,
                 () -> this.consumeExecutor.submit(consumeRequest));
+            // koupleless-adapter patch end
         }
     }
 

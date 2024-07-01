@@ -45,7 +45,9 @@ public class ConsumeMessageConcurrentlyService implements ConsumeMessageService 
     private final MessageListenerConcurrently messageListener;
     private final BlockingQueue<Runnable>     consumeRequestQueue;
     private final ThreadPoolExecutor          consumeExecutor;
+    // koupleless-adapter patch begin
     private final ClassLoader                 consumeBizClassLoader;
+    // koupleless-adapter patch end
     private final String                      consumerGroup;
 
     private final ScheduledExecutorService    scheduledExecutorService;
@@ -64,7 +66,9 @@ public class ConsumeMessageConcurrentlyService implements ConsumeMessageService 
             this.defaultMQPushConsumer.getConsumeThreadMin(),
             this.defaultMQPushConsumer.getConsumeThreadMax(), 1000 * 60, TimeUnit.MILLISECONDS,
             this.consumeRequestQueue, new ThreadFactoryImpl("ConsumeMessageThread_"));
+        // koupleless-adapter patch begin
         consumeBizClassLoader = Thread.currentThread().getContextClassLoader();
+        // koupleless-adapter patch end
 
         this.scheduledExecutorService = Executors.newSingleThreadScheduledExecutor(
             new ThreadFactoryImpl("ConsumeMessageScheduledThread_"));
@@ -193,6 +197,7 @@ public class ConsumeMessageConcurrentlyService implements ConsumeMessageService 
         final int consumeBatchSize = this.defaultMQPushConsumer.getConsumeMessageBatchMaxSize();
         if (msgs.size() <= consumeBatchSize) {
             ConsumeRequest consumeRequest = new ConsumeRequest(msgs, processQueue, messageQueue);
+            // koupleless-adapter patch begin
             SwitchTCCLUtil.doSwitchTCCLAndRun(this.consumeBizClassLoader, () -> {
                 try {
                     this.consumeExecutor.submit(consumeRequest);
@@ -200,6 +205,7 @@ public class ConsumeMessageConcurrentlyService implements ConsumeMessageService 
                     this.submitConsumeRequestLater(consumeRequest);
                 }
             });
+            // koupleless-adapter patch end
         } else {
             for (int total = 0; total < msgs.size();) {
                 List<MessageExt> msgThis = new ArrayList<MessageExt>(consumeBatchSize);
@@ -214,8 +220,10 @@ public class ConsumeMessageConcurrentlyService implements ConsumeMessageService 
                 ConsumeRequest consumeRequest = new ConsumeRequest(msgThis, processQueue,
                     messageQueue);
                 try {
+                    // koupleless-adapter patch begin
                     SwitchTCCLUtil.doSwitchTCCLAndRun(this.consumeBizClassLoader,
                         () -> this.consumeExecutor.submit(consumeRequest));
+                    // koupleless-adapter patch end
                 } catch (RejectedExecutionException e) {
                     for (; total < msgs.size(); total++) {
                         msgThis.add(msgs.get(total));
@@ -354,10 +362,12 @@ public class ConsumeMessageConcurrentlyService implements ConsumeMessageService 
 
             @Override
             public void run() {
+                // koupleless-adapter patch begin
                 SwitchTCCLUtil.doSwitchTCCLAndRun(
                     ConsumeMessageConcurrentlyService.this.consumeBizClassLoader,
                     () -> ConsumeMessageConcurrentlyService.this.consumeExecutor
                         .submit(consumeRequest));
+                // koupleless-adapter patch end
             }
         }, 5000, TimeUnit.MILLISECONDS);
     }
