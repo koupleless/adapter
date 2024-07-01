@@ -47,11 +47,10 @@ public class KouplelessDubboServiceListener implements ServiceListener {
         ServiceMetadata serviceMetadata = sc.getServiceMetadata();
         Object target = serviceMetadata.getTarget();
         DubboServiceComponent dubboServiceComponent = DubboServiceComponent.builder()
-            .dubboProtocol(KouplelessDubboUtils.parseDubboProtocol(sc)).identifier(
-                        KouplelessDubboUtils.buildServiceIdentifier(sc))
-            .bean(target).beanClass(target.getClass())
-            .interfaceType(serviceMetadata.getServiceType()).metaData(serviceMetadata)
-            .state(ServiceState.EXPORTED).build();
+            .dubboProtocol(KouplelessDubboUtils.parseDubboProtocol(sc))
+            .identifier(KouplelessDubboUtils.buildServiceIdentifier(sc)).bean(target)
+            .beanClass(target.getClass()).interfaceType(serviceMetadata.getServiceType())
+            .metaData(serviceMetadata).state(ServiceState.EXPORTED).build();
         bizRuntimeContext.registerService(dubboServiceComponent);
     }
 
