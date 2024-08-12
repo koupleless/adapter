@@ -20,8 +20,6 @@ public Object getProxy(@Nullable ClassLoader classLoader) {
 }
 ```
 
-ConfigFileApplicationListener中使用SpringFactoriesLoader.loadFactories的地方都是使用当前类的ClassLoader来扫描资源文件，导致只能扫描到基座的资源文件
-
 ### 版本范围 
 springboot 2.7.11, 2.7.12, 3.0.6, 3.0.7, 3.1.0
 spring-aop 5.3.27, 6.0.8, 6.0.9
