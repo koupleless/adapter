@@ -86,7 +86,7 @@
         <module>koupleless-adapter-springboot-2.3</module>
         <module>koupleless-adapter-logback</module>
         <module>koupleless-adapter-rocketmq-4.4</module>
-<!--        <module>koupleless-adapter-spring-aop</module>-->
+        <module>koupleless-adapter-spring-aop-5.3.27</module>
 
 <!--        jdk17       -->
         <module>koupleless-adapter-log4j2-spring-starter-3.0</module>
@@ -96,6 +96,8 @@
 
         <module>koupleless-adapter-logback-spring-starter-3.0</module>
         <module>koupleless-adapter-logback-spring-starter-3.2</module>
+
+        <module>koupleless-adapter-spring-aop-6.0.8</module>
 
 <!--        common feature jar for adapters -->
         <module>features/dubbo3-service-model</module>
