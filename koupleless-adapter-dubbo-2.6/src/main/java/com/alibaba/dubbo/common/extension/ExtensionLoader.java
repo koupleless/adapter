@@ -67,11 +67,13 @@ public class ExtensionLoader<T> {
         .compile("\\s*[,]+\\s*");
 
     private static final ConcurrentMap<Class<?>, ExtensionLoader<?>>                             EXTENSION_LOADERS                     = new ConcurrentHashMap<>();
-    private static final ConcurrentMap<ClassLoader, ConcurrentMap<Class<?>, ExtensionLoader<?>>> EXTENSION_LOADERS_SUPPORT_CLASSLOADER = new ConcurrentHashMap<>();
 
+    // start adapter by koupleless
+    private static final ConcurrentMap<ClassLoader, ConcurrentMap<Class<?>, ExtensionLoader<?>>> EXTENSION_LOADERS_SUPPORT_CLASSLOADER = new ConcurrentHashMap<>();
     static {
         EXTENSION_LOADERS_SUPPORT_CLASSLOADER.put(findClassLoader(), EXTENSION_LOADERS);
     }
+    // end adapter by koupleless
 
     private static final ConcurrentMap<Class<?>, Object> EXTENSION_INSTANCES    = new ConcurrentHashMap<Class<?>, Object>();
 
@@ -118,6 +120,8 @@ public class ExtensionLoader<T> {
                 "Extension type(" + type + ") is not extension, because WITHOUT @"
                                                + SPI.class.getSimpleName() + " Annotation!");
         }
+
+        // start adapter by koupleless
         ClassLoader classLoader = findClassLoader();
         ConcurrentMap<Class<?>, ExtensionLoader<?>> classExtensionLoaderConcurrentMap = EXTENSION_LOADERS_SUPPORT_CLASSLOADER
             .get(classLoader);
@@ -141,13 +145,16 @@ public class ExtensionLoader<T> {
             loader = (ExtensionLoader<T>) classExtensionLoaderConcurrentMap.get(type);
         }
         return loader;
+        // end adapter by koupleless
     }
 
     private static ClassLoader findClassLoader() {
+        // start adapter by koupleless
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         if (classLoader != null)
             return classLoader;
         return ExtensionLoader.class.getClassLoader();
+        // end adapter by koupleless
     }
 
     public String getExtensionName(T extensionInstance) {
