@@ -1,5 +1,5 @@
 # koupleless-adapter-tongweb
-组件是作为 [Koupleless](https://github.com/koupleless/koupleless) 项目的一个扩展组件，目的是适配东方通（TongWEB)容器。
+组件是作为 [Koupleless](https://github.com/koupleless/koupleless) 项目的一个扩展组件，目的是适配东方通（TongWEB)容器，以支持基座模块复用相同的端口。
 
 由于 TongWEB 是商业软件，在该仓库中无法直接引入，所以需要本地已经有 TongWEB 依赖包。
 
@@ -17,6 +17,7 @@ mvn install:install-file -DgroupId=com.tongweb -DartifactId=tongweb-lic-sdk -Dve
 ```
 
 ### 2. 编译安装本项目插件
+
 进入本项目的 tongweb7-web-adapter 目录执行 `mvn install` 命令即可。
 项目将会安装 tongweb7-web-ark-plugin 和 tongweb7-sofa-ark-springboot-starter 两个模块。
 
