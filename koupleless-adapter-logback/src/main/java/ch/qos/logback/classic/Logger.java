@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import ch.qos.logback.core.util.Loader;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
 import org.slf4j.impl.StaticLoggerBinder;
@@ -788,8 +789,11 @@ public final class Logger implements org.slf4j.Logger, LocationAwareLogger,
     public LoggerContext getLoggerContext() {
         // diff that made by koupleless, get loggerContext from loggerContextMap
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        return loggerContextMap.computeIfAbsent(classLoader,
+        LoggerContext loggerContext = loggerContextMap.computeIfAbsent(classLoader,
             k -> (LoggerContext) StaticLoggerBinder.getSingleton().getLoggerFactory());
+
+        Loader.registerLoggerContext(loggerContext);
+        return loggerContext;
     }
 
     public void log(Marker marker, String fqcn, int levelInt, String message, Object[] argArray,

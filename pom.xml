@@ -101,6 +101,7 @@
 
 <!--        common feature jar for adapters -->
         <module>features/dubbo3-service-model</module>
+        <module>koupleless-adapter-spring-boot-logback-2.7.14</module>
     </modules>
 
     <dependencyManagement>
