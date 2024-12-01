@@ -1,0 +1,9 @@
+version: 1.2.2
+adapterMappings:
+  - matcher:
+      groupId: org.apache.dubbo
+      artifactId: dubbo-common
+      versionRange: "[3.1.0,3.2.0)"
+    adapter:
+      artifactId: koupleless-adapter-dubbo-3.1
+      groupId: com.alipay.sofa.koupleless

@@ -130,13 +130,6 @@ public class Loader {
 
     public static Class<?> loadClass(String clazz, Context context) throws ClassNotFoundException {
         ClassLoader cl = getClassLoaderOfObject(context);
-
-        // diff that made by koupleless, add this loggerContext to loggerContextMap
-        if (context instanceof LoggerContext
-            && loggerContextMap.containsKey((LoggerContext) context)) {
-            cl = loggerContextMap.get(context);
-        }
-
         return cl.loadClass(clazz);
     }
 
@@ -151,6 +144,12 @@ public class Loader {
         if (o == null) {
             throw new NullPointerException("Argument cannot be null");
         }
+
+        // diff that made by koupleless, add this loggerContext to loggerContextMap
+        if (o instanceof LoggerContext && loggerContextMap.containsKey((LoggerContext) o)) {
+            return loggerContextMap.get(o);
+        }
+
         return getClassLoaderOfClass(o.getClass());
     }
 
