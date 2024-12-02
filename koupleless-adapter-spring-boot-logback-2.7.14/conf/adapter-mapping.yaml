@@ -1,0 +1,9 @@
+version: 1.2.3
+adapterMappings:
+  - matcher:
+      groupId: org.springframework.boot
+      artifactId: spring-boot
+      versionRange: "[2.5.1,2.7.14]"
+    adapter:
+      artifactId: koupleless-adapter-spring-boot-logback-2.7.14
+      groupId: com.alipay.sofa.koupleless
