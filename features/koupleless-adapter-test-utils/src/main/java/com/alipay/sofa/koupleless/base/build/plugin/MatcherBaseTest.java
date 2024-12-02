@@ -21,7 +21,6 @@ import com.alipay.sofa.koupleless.base.build.plugin.model.KouplelessAdapterConfi
 import com.alipay.sofa.koupleless.base.build.plugin.model.MavenDependencyAdapterMapping;
 import org.apache.maven.model.Dependency;
 import edu.emory.mathcs.backport.java.util.Collections;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.maven.artifact.Artifact;
 import org.eclipse.aether.version.InvalidVersionSpecificationException;
 import org.mockito.Mockito;
@@ -29,29 +28,26 @@ import org.yaml.snakeyaml.Yaml;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author lianglipeng.llp@alibaba-inc.com
  * @version $Id: AdapterBaseTest.java, v 0.1 2024年11月26日 11:31 立蓬 Exp $
  */
 public abstract class MatcherBaseTest {
-    protected KouplelessBaseBuildPrePackageMojo               mojo            = new KouplelessBaseBuildPrePackageMojo();
-
-    protected final Collection<MavenDependencyAdapterMapping> adapterMappings = loadAdapterMappings();
+    protected KouplelessAdapterConfig config = loadConfig();
 
     public MatcherBaseTest() throws IOException {
     }
 
-    private Collection<MavenDependencyAdapterMapping> loadAdapterMappings() throws IOException {
+    private KouplelessAdapterConfig loadConfig() {
         String MAPPING_FILE = "conf/adapter-mapping.yaml";
         InputStream mappingConfigIS = this.getClass().getClassLoader()
             .getResourceAsStream(MAPPING_FILE);
         Yaml yaml = new Yaml();
-        KouplelessAdapterConfig config = yaml.loadAs(mappingConfigIS,
-            KouplelessAdapterConfig.class);
-        return CollectionUtils.emptyIfNull(config.getAdapterMappings());
+        return yaml.loadAs(mappingConfigIS, KouplelessAdapterConfig.class);
     }
 
     protected Artifact mockArtifact(String groupId, String artifactId, String version) {
@@ -63,7 +59,14 @@ public abstract class MatcherBaseTest {
     }
 
     protected List<Dependency> getMatcherAdaptor(Artifact artifact) throws InvalidVersionSpecificationException {
-        return mojo.getDependenciesByMatching(Collections.singleton(artifact), adapterMappings);
+        Map<MavenDependencyAdapterMapping, Artifact> matched = config
+            .matches(Collections.singleton(artifact));
 
+        List<Dependency> dependencies = new ArrayList<>();
+        for (Map.Entry<MavenDependencyAdapterMapping, Artifact> entry : matched.entrySet()) {
+            MavenDependencyAdapterMapping mapping = entry.getKey();
+            dependencies.add(mapping.getAdapter());
+        }
+        return dependencies;
     }
 }
