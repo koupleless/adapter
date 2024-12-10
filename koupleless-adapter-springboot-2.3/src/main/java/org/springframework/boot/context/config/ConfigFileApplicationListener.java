@@ -208,7 +208,7 @@ public class ConfigFileApplicationListener implements EnvironmentPostProcessor,
     }
 
     List<EnvironmentPostProcessor> loadPostProcessors() {
-        // adaptor for springboot 2.3.x
+        // diff for koupleless adaptor in springboot 2.3.x
         return SpringFactoriesLoader.loadFactories(EnvironmentPostProcessor.class,
             ClassUtils.getDefaultClassLoader());
     }
@@ -340,7 +340,7 @@ public class ConfigFileApplicationListener implements EnvironmentPostProcessor,
             this.placeholdersResolver = new PropertySourcesPlaceholdersResolver(this.environment);
             this.resourceLoader = (resourceLoader != null) ? resourceLoader
                 : new DefaultResourceLoader(null);
-            // adaptor for springboot 2.3.x
+            // diff for koupleless adaptor in springboot 2.3.x
             this.propertySourceLoaders = SpringFactoriesLoader
                 .loadFactories(PropertySourceLoader.class, ClassUtils.getDefaultClassLoader());
         }
