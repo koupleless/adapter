@@ -13,8 +13,7 @@
     <artifactId>koupleless-adapter-configs</artifactId>
 
     <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
+        <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- skip deploy parent bundle -->
         <maven.deploy.skip>false</maven.deploy.skip>
