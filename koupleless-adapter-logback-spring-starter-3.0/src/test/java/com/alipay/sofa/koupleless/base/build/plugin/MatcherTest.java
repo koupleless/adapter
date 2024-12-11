@@ -40,25 +40,26 @@ public class MatcherTest extends MatcherBaseTest {
      * test for adaptor: koupleless-adapter-log4j2-spring-starter-3.0
      *     matcher:
      *       groupId: org.springframework.boot
-     *       artifactId: spring-boot-starter-log4j2
+     *       artifactId: spring-boot-starter-logging
      *       versionRange: "[3.0.0,3.2.0)"
      *     adapter:
-     *       artifactId: koupleless-adapter-log4j2-spring-starter-3.0
+     *       artifactId: koupleless-adapter-logback-spring-starter-3.0
+     *       groupId: com.alipay.sofa.koupleless
      */
     @Test
     public void testMatcher13() throws InvalidVersionSpecificationException {
         List<Dependency> res = getMatcherAdaptor(
-            mockArtifact("org.springframework.boot", "spring-boot-starter-log4j2", "3.0.0"));
+            mockArtifact("org.springframework.boot", "spring-boot-starter-logging", "3.0.0"));
         assertEquals(1, res.size());
-        assertEquals(res.get(0).getArtifactId(), "koupleless-adapter-log4j2-spring-starter-3.0");
+        assertEquals(res.get(0).getArtifactId(), "koupleless-adapter-logback-spring-starter-3.0");
 
         res = getMatcherAdaptor(
-            mockArtifact("org.springframework.boot", "spring-boot-starter-log4j2", "3.1.0"));
+            mockArtifact("org.springframework.boot", "spring-boot-starter-logging", "3.1.0"));
         assertEquals(1, res.size());
-        assertEquals(res.get(0).getArtifactId(), "koupleless-adapter-log4j2-spring-starter-3.0");
+        assertEquals(res.get(0).getArtifactId(), "koupleless-adapter-logback-spring-starter-3.0");
 
         res = getMatcherAdaptor(
-            mockArtifact("org.springframework.boot", "spring-boot-starter-log4j2", "3.2.0"));
+            mockArtifact("org.springframework.boot", "spring-boot-starter-logging", "3.2.0"));
         assertEquals(0, res.size());
     }
 }
