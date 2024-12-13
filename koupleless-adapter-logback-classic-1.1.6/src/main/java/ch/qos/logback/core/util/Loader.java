@@ -31,6 +31,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Load resources (or images) from various sources.
+ * koupleless adapter: logback-classic:[1.1.6, 1.4.12) because few users use logback-classic < 1.1.6, we set it as (,1.4.12)
  *
  * @author Ceki G&uuml;lc&uuml;
  */
