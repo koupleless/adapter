@@ -23,7 +23,7 @@
     <dependencies>
         <dependency>
             <groupId>com.alipay.sofa.koupleless</groupId>
-            <artifactId>koupleless-adapter-logback</artifactId>
+            <artifactId>koupleless-adapter-logback-classic-1.1.6</artifactId>
             <version>${revision}</version>
             <scope>provided</scope>
         </dependency>
