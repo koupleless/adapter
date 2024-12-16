@@ -40,27 +40,25 @@ public class MatcherTest extends MatcherBaseTest {
      * test for adaptor: koupleless-adapter-logback
      * pattern:
      *     matcher:
-     *       groupId: org.springframework.boot
-     *       artifactId: spring-boot-starter-logging
-     *       versionRange: "[1.*,)"
+     *       groupId: ch.qos.logback
+     *       artifactId: logback-classic
+     *       versionRange: "[1.1.7,1.2.13]"
      *     adapter:
      *       artifactId: koupleless-adapter-logback
+     *       groupId: com.alipay.sofa.koupleless
      */
     @Test
     public void testMatcher2() throws InvalidVersionSpecificationException {
-        List<Dependency> res = getMatcherAdaptor(mockArtifact("org.springframework.boot",
-            "spring-boot-starter-logging", "1.0.0.RELEASE"));
+        List<Dependency> res = getMatcherAdaptor(
+            mockArtifact("ch.qos.logback", "logback-classic", "1.1.7"));
         assertEquals(1, res.size());
         assertEquals(res.get(0).getArtifactId(), "koupleless-adapter-logback");
 
-        res = getMatcherAdaptor(
-            mockArtifact("org.springframework.boot", "spring-boot-starter-logging", "2.0.0.M5"));
+        res = getMatcherAdaptor(mockArtifact("ch.qos.logback", "logback-classic", "1.2.13"));
         assertEquals(1, res.size());
         assertEquals(res.get(0).getArtifactId(), "koupleless-adapter-logback");
 
-        res = getMatcherAdaptor(
-            mockArtifact("org.springframework.boot", "spring-boot-starter-logging", "3.3.5"));
-        assertEquals(1, res.size());
-        assertEquals(res.get(0).getArtifactId(), "koupleless-adapter-logback");
+        res = getMatcherAdaptor(mockArtifact("ch.qos.logback", "logback-classic", "1.3.0"));
+        assertEquals(0, res.size());
     }
 }
