@@ -70,7 +70,8 @@ jobs:
           if [[ -n ${modules_in_release_version} ]]; then
             modules_in_release_version="${modules_in_release_version:0:-1}"
             echo "release for module ${modules_in_release_version}"
-            mvn --batch-mode deploy -Prelease -pl ${modules_in_release_version} -am -amd -B -U
+            mvn --batch-mode install -Prelease -pl ${modules_in_release_version} -am -amd -B -U
+            mvn --batch-mode deploy -Prelease -pl ${modules_in_release_version} -B -U
             echo "release completed for module ${modules_in_release_version}"
           fi
         env:
@@ -140,12 +141,13 @@ jobs:
           if [[ -n ${modules_in_release_version} ]]; then
             modules_in_release_version="${modules_in_release_version:0:-1}"
             echo "release for module ${modules_in_release_version}"
-            mvn --batch-mode deploy -Prelease -pl ${modules_in_release_version} -am -amd -B -U
+            mvn --batch-mode install -Prelease -pl ${modules_in_release_version} -am -amd -B -U
+            mvn --batch-mode deploy -Prelease -pl ${modules_in_release_version} -B -U
             echo "release completed for module ${modules_in_release_version}"
           fi
           
           # 请在发布 koupleless-adapter-configs 之前，发布 jdk8 和 jdk17 所有的 koupleless-adapters
-          mvn --batch-mode deploy -Prelease -pl koupleless-adapter-configs -am -amd -B -U
+          mvn --batch-mode deploy -Prelease -pl koupleless-adapter-configs -B -U
         env:
           MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
