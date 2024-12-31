@@ -88,6 +88,7 @@
         <module>koupleless-adapter-rocketmq-4.4</module>
         <module>koupleless-adapter-spring-aop-5.3.27</module>
         <module>koupleless-adapter-spring-boot-logback-2.7.14</module>
+        <module>koupleless-adaptor-module-resource-load-spring-boot-2.7.14</module>
 
 <!--        jdk17       -->
         <module>koupleless-adapter-log4j2-spring-starter-3.0</module>
@@ -108,6 +109,7 @@
         <module>koupleless-adapter-configs</module>
         <module>koupleless-adapter-logback-classic-1.4.12</module>
         <module>koupleless-adapter-logback-classic-1.1.6</module>
+
     </modules>
 
     <dependencyManagement>
