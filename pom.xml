@@ -9,7 +9,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <revision>1.2.5</revision>
+        <revision>1.2.6</revision>
         <koupleless.runime.version>1.3.0</koupleless.runime.version>
         <project.encoding>UTF-8</project.encoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
