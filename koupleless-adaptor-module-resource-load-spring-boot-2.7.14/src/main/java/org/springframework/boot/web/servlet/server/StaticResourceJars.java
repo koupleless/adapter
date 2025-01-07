@@ -38,7 +38,8 @@ class StaticResourceJars {
     List<URL> getUrls() {
         // diff for koupleless adaptor in springboot [2.1.0.RELEASE - 2.7.14]
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        if (classLoader.getClass().getName().equals("com.alipay.sofa.ark.web.embed.tomcat.ArkTomcatEmbeddedWebappClassLoader")) {
+        if (classLoader.getClass().getName()
+            .equals("com.alipay.sofa.ark.web.embed.tomcat.ArkTomcatEmbeddedWebappClassLoader")) {
             classLoader = classLoader.getParent();
         }
         if (classLoader instanceof URLClassLoader) {
