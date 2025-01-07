@@ -16,8 +16,6 @@
  */
 package org.springframework.boot.web.servlet.server;
 
-import com.alipay.sofa.ark.web.embed.tomcat.ArkTomcatEmbeddedWebappClassLoader;
-
 import java.io.File;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
@@ -39,9 +37,8 @@ class StaticResourceJars {
 
     List<URL> getUrls() {
         // diff for koupleless adaptor in springboot [2.1.0.RELEASE - 2.7.14]
-        // 改造原springboot，兼容koupleless部署无法加载到模块的目录问题
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        if (classLoader instanceof ArkTomcatEmbeddedWebappClassLoader) {
+        if (classLoader.getClass().getName().equals("com.alipay.sofa.ark.web.embed.tomcat.ArkTomcatEmbeddedWebappClassLoader")) {
             classLoader = classLoader.getParent();
         }
         if (classLoader instanceof URLClassLoader) {
