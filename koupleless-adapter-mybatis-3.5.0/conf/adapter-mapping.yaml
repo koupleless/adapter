@@ -1,0 +1,9 @@
+version: 1.2.4
+adapterMappings:
+  - matcher:
+      groupId: org.mybatis
+      artifactId: mybatis
+      versionRange: "[3.5.0,)"
+    adapter:
+      artifactId: koupleless-adapter-mybatis-3.5.0
+      groupId: com.alipay.sofa.koupleless
