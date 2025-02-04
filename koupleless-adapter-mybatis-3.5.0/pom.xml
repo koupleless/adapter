@@ -24,7 +24,7 @@
             <groupId>com.alipay.sofa.koupleless</groupId>
             <artifactId>koupleless-adapter-ognl-3.4.0</artifactId>
             <version>${revision}</version>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
@@ -47,7 +47,7 @@
             <groupId>com.alipay.sofa.koupleless</groupId>
             <artifactId>koupleless-adapter-utils</artifactId>
             <version>0.0.1</version>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
