@@ -82,8 +82,8 @@
         <module>koupleless-adapter-dubbo-2.7</module>
         <module>koupleless-adapter-dubbo-3.1</module>
 
-        <module>koupleless-adapter-ognl-3.4.0</module>
-        <module>koupleless-adapter-mybatis-3.5.0</module>
+        <module>koupleless-adapter-ognl-3.4.2</module>
+        <module>koupleless-adapter-mybatis-3.5.15</module>
         <module>koupleless-adapter-apollo-1.6</module>
         <module>koupleless-adapter-springboot-2.3</module>
         <module>koupleless-adapter-logback</module>

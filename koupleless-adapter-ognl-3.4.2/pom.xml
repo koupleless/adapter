@@ -10,7 +10,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>koupleless-adapter-ognl-3.4.0</artifactId>
+    <artifactId>koupleless-adapter-ognl-3.4.2</artifactId>
     <version>${revision}</version>
 
     <properties>
@@ -24,7 +24,7 @@
             <groupId>ognl</groupId>
             <artifactId>ognl</artifactId>
             <!-- 目前已人工确认，3.4.0 到最新版本都适用 -->
-            <version>3.4.0</version>
+            <version>3.4.2</version>
             <scope>provided</scope>
         </dependency>
 

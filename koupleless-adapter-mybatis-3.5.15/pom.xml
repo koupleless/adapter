@@ -10,7 +10,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>koupleless-adapter-mybatis-3.5.0</artifactId>
+    <artifactId>koupleless-adapter-mybatis-3.5.15</artifactId>
     <version>${revision}</version>
 
     <properties>
@@ -30,8 +30,8 @@
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
-            <!-- 目前已人工确认，3.5.0 到最新版本都适用 -->
-            <version>3.5.0</version>
+            <!-- 目前已人工确认，3.5.15 到最新版本都适用 -->
+            <version>3.5.15</version>
             <scope>provided</scope>
         </dependency>
 
