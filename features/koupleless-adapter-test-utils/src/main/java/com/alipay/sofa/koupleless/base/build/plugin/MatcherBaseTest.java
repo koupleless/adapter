@@ -28,6 +28,8 @@ import org.yaml.snakeyaml.Yaml;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -68,5 +70,26 @@ public abstract class MatcherBaseTest {
             dependencies.add(mapping.getAdapter());
         }
         return dependencies;
+    }
+
+    public Object invokeMethod(Class clazz, Object obj, String methodName, Class[] argClasses,
+                               Object... args) {
+        try {
+            Method declaredMethod = clazz.getDeclaredMethod(methodName, argClasses);
+            declaredMethod.setAccessible(true);
+            return declaredMethod.invoke(obj, args);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Object getFieldValue(Class clazz, Object obj, String fieldName) {
+        try {
+            Field declaredField = clazz.getDeclaredField(fieldName);
+            declaredField.setAccessible(true);
+            return declaredField.get(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
