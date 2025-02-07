@@ -55,6 +55,7 @@
 
     <build>
         <plugins>
+            <!-- shade 进去即可把本组件 compile 依赖复制到目标 SpringBoot 应用 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
