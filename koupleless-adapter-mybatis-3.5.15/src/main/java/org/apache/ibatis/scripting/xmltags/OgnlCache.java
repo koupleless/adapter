@@ -19,9 +19,12 @@ package org.apache.ibatis.scripting.xmltags;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import ognl.*;
+import org.apache.ibatis.ognl.Ognl;
+import org.apache.ibatis.ognl.OgnlContext;
+import org.apache.ibatis.ognl.OgnlException;
 
 import org.apache.ibatis.builder.BuilderException;
+
 import com.alipay.sofa.koupleless.adapter.AdapterUtils;
 
 /**
@@ -43,8 +46,8 @@ public final class OgnlCache {
 
     public static Object getValue(String expression, Object root) {
         try {
-            OgnlContext context = Ognl.createDefaultContext(root, (MemberAccess) MEMBER_ACCESS,
-                (ClassResolver) CLASS_RESOLVER, null);
+            OgnlContext context = Ognl.createDefaultContext(root, MEMBER_ACCESS, CLASS_RESOLVER,
+                null);
             return Ognl.getValue(parseExpression(expression), context, root);
         } catch (OgnlException e) {
             throw new BuilderException(

@@ -1,9 +1,0 @@
-version: 1.2.4
-adapterMappings:
-  - matcher:
-      groupId: ognl
-      artifactId: ognl
-      versionRange: "[3.4.0,)"
-    adapter:
-      artifactId: koupleless-adapter-ognl-3.4.0
-      groupId: com.alipay.sofa.koupleless

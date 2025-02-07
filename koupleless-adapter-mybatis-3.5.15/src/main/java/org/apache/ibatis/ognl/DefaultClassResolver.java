@@ -16,12 +16,13 @@
  */
 package org.apache.ibatis.ognl;
 
-import com.alipay.sofa.koupleless.adapter.AdapterUtils;
-import ognl.ClassResolver;
-import ognl.OgnlContext;
+import org.apache.ibatis.ognl.ClassResolver;
+import org.apache.ibatis.ognl.OgnlContext;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import com.alipay.sofa.koupleless.adapter.AdapterUtils;
 
 /**
  * Default class resolution.  Uses Class.forName() to look up classes by name.

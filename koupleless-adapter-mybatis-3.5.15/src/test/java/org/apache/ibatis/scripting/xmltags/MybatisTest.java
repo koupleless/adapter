@@ -17,7 +17,7 @@
 package org.apache.ibatis.scripting.xmltags;
 
 import com.alipay.sofa.koupleless.base.build.plugin.MatcherBaseTest;
-import ognl.ASTStaticField;
+import org.apache.ibatis.ognl.ASTStaticField;
 import org.apache.maven.model.Dependency;
 import org.eclipse.aether.version.InvalidVersionSpecificationException;
 import org.junit.After;
@@ -60,20 +60,20 @@ public class MybatisTest extends MatcherBaseTest {
      * matcher:
      * groupId: org.mybatis
      * artifactId: mybatis
-     * versionRange: "[3.5.0,)"
+     * versionRange: "[3.5.15,)"
      * adapter:
-     * artifactId: koupleless-adapter-mybatis-3.5.0
+     * artifactId: koupleless-adapter-mybatis-3.5.15
      * groupId: com.alipay.sofa.koupleless
      */
     @Test
     public void testMatcher() throws InvalidVersionSpecificationException {
-        List<Dependency> res = getMatcherAdaptor(mockArtifact("org.mybatis", "mybatis", "3.5.0"));
+        List<Dependency> res = getMatcherAdaptor(mockArtifact("org.mybatis", "mybatis", "3.5.15"));
         assertEquals(1, res.size());
-        assertEquals(res.get(0).getArtifactId(), "koupleless-adapter-mybatis-3.5.0");
+        assertEquals(res.get(0).getArtifactId(), "koupleless-adapter-mybatis-3.5.15");
 
         res = getMatcherAdaptor(mockArtifact("org.mybatis", "mybatis", "3.6.1"));
         assertEquals(1, res.size());
-        assertEquals(res.get(0).getArtifactId(), "koupleless-adapter-mybatis-3.5.0");
+        assertEquals(res.get(0).getArtifactId(), "koupleless-adapter-mybatis-3.5.15");
 
         res = getMatcherAdaptor(mockArtifact("org.mybatis", "mybatis", "3.4.9"));
         assertEquals(0, res.size());
@@ -130,5 +130,11 @@ public class MybatisTest extends MatcherBaseTest {
         clearByClassLoader(this.getClass().getClassLoader());
         assertEquals(1, expressionCache.size());
         assertEquals(1, expressionCache.get(this.getClass().getClassLoader().getParent()).size());
+    }
+
+    @Test
+    public void testGetValue() {
+        assertEquals("STATIC_VALUE_1", OgnlCache.getValue(
+            "@org.apache.ibatis.scripting.xmltags.MybatisTest@TEST_STATIC_VALUE_1", null));
     }
 }

@@ -3,7 +3,7 @@ adapterMappings:
   - matcher:
       groupId: org.mybatis
       artifactId: mybatis
-      versionRange: "[3.5.0,)"
+      versionRange: "[3.5.15,)"
     adapter:
-      artifactId: koupleless-adapter-mybatis-3.5.0
+      artifactId: koupleless-adapter-mybatis-3.5.15
       groupId: com.alipay.sofa.koupleless
