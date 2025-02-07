@@ -16,13 +16,9 @@
  */
 package org.apache.ibatis.ognl;
 
-import org.apache.ibatis.ognl.ClassResolver;
-import org.apache.ibatis.ognl.OgnlContext;
-
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.alipay.sofa.koupleless.adapter.AdapterUtils;
+import static com.alipay.sofa.koupleless.adapter.AdapterUtils.findClassLoader;
 
 /**
  * Default class resolution.  Uses Class.forName() to look up classes by name.
@@ -31,8 +27,10 @@ import com.alipay.sofa.koupleless.adapter.AdapterUtils;
  */
 public class DefaultClassResolver implements ClassResolver {
 
-    private final ConcurrentHashMap<ClassLoader, Map<String, Class<?>>> classes = new ConcurrentHashMap<>(
+    // patch begin
+    private final ConcurrentHashMap<ClassLoader, ConcurrentHashMap<String, Class<?>>> classes = new ConcurrentHashMap<>(
         23);
+    // patch end
 
     public DefaultClassResolver() {
         super();
@@ -40,15 +38,12 @@ public class DefaultClassResolver implements ClassResolver {
 
     public <T> Class<T> classForName(String className,
                                      OgnlContext context) throws ClassNotFoundException {
-        ClassLoader classLoader = AdapterUtils.findClassLoader();
-        Map<String, Class<?>> innerMap = classes.get(classLoader);
-        Class<?> result = null;
-        if (innerMap == null) {
-            innerMap = new ConcurrentHashMap<>(101);
-            classes.putIfAbsent(classLoader, innerMap);
-        } else {
-            result = innerMap.get(className);
-        }
+        // patch begin
+        ClassLoader classLoader = findClassLoader();
+        ConcurrentHashMap<String, Class<?>> innerMap = classes.computeIfAbsent(classLoader,
+            cl -> new ConcurrentHashMap<>(101));
+        Class<?> result = innerMap.get(className);
+        // patch end
         if (result != null) {
             return (Class<T>) result;
         }
@@ -67,7 +62,9 @@ public class DefaultClassResolver implements ClassResolver {
                 throw e;
             }
         }
+        // patch begin
         innerMap.putIfAbsent(className, result);
+        // patch end
         return (Class<T>) result;
     }
 
@@ -75,7 +72,9 @@ public class DefaultClassResolver implements ClassResolver {
         return Class.forName(className);
     }
 
+    // patch begin
     public void clearByClassLoader(ClassLoader classLoader) {
         classes.remove(classLoader);
     }
+    // patch end
 }

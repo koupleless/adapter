@@ -16,7 +16,6 @@
  */
 package org.apache.ibatis.scripting.xmltags;
 
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.ibatis.ognl.Ognl;
@@ -25,7 +24,7 @@ import org.apache.ibatis.ognl.OgnlException;
 
 import org.apache.ibatis.builder.BuilderException;
 
-import com.alipay.sofa.koupleless.adapter.AdapterUtils;
+import static com.alipay.sofa.koupleless.adapter.AdapterUtils.findClassLoader;
 
 /**
  * Caches OGNL parsed expressions.
@@ -36,9 +35,11 @@ import com.alipay.sofa.koupleless.adapter.AdapterUtils;
  */
 public final class OgnlCache {
 
-    private static final OgnlMemberAccess                                    MEMBER_ACCESS   = new OgnlMemberAccess();
-    private static final OgnlClassResolver                                   CLASS_RESOLVER  = new OgnlClassResolver();
-    private static final Map<ClassLoader, ConcurrentHashMap<String, Object>> expressionCache = new ConcurrentHashMap<>();
+    private static final OgnlMemberAccess                                                  MEMBER_ACCESS   = new OgnlMemberAccess();
+    private static final OgnlClassResolver                                                 CLASS_RESOLVER  = new OgnlClassResolver();
+    // patch begin
+    private static final ConcurrentHashMap<ClassLoader, ConcurrentHashMap<String, Object>> expressionCache = new ConcurrentHashMap<>();
+    // patch end
 
     private OgnlCache() {
         // Prevent Instantiation of Static Class
@@ -56,24 +57,25 @@ public final class OgnlCache {
     }
 
     private static Object parseExpression(String expression) throws OgnlException {
-        ClassLoader classLoader = AdapterUtils.findClassLoader();
-        ConcurrentHashMap<String, Object> innerMap = expressionCache.get(classLoader);
-        Object node = null;
-        if (innerMap == null) {
-            innerMap = new ConcurrentHashMap<>();
-            expressionCache.putIfAbsent(classLoader, innerMap);
-        } else {
-            node = innerMap.get(expression);
-        }
+        // patch begin
+        ClassLoader classLoader = findClassLoader();
+        ConcurrentHashMap<String, Object> innerMap = expressionCache.computeIfAbsent(classLoader,
+            cl -> new ConcurrentHashMap<>());
+        Object node = innerMap.get(expression);
+        // patch end
         if (node == null) {
             node = Ognl.parseExpression(expression);
+            // patch begin
             innerMap.put(expression, node);
+            // patch end
         }
         return node;
     }
 
+    // patch begin
     public static void clearByClassLoader(ClassLoader classLoader) throws Exception {
         expressionCache.remove(classLoader);
         CLASS_RESOLVER.clearByClassLoader(classLoader);
     }
+    // patch end
 }

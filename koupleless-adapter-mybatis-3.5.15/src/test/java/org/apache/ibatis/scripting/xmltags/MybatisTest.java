@@ -16,8 +16,11 @@
  */
 package org.apache.ibatis.scripting.xmltags;
 
+import com.alipay.sofa.koupleless.adapter.AdapterUtils;
 import com.alipay.sofa.koupleless.base.build.plugin.MatcherBaseTest;
 import org.apache.ibatis.ognl.ASTStaticField;
+import org.apache.ibatis.ognl.DefaultClassResolver;
+import org.apache.ibatis.ognl.OgnlContext;
 import org.apache.maven.model.Dependency;
 import org.eclipse.aether.version.InvalidVersionSpecificationException;
 import org.junit.After;
@@ -112,7 +115,7 @@ public class MybatisTest extends MatcherBaseTest {
     }
 
     @Test
-    public void testClearByClassLoader() throws Exception {
+    public void testOgnlCacheClearByClassLoader() throws Exception {
 
         ConcurrentHashMap<ClassLoader, ConcurrentHashMap<String, Object>> expressionCache = (ConcurrentHashMap) getFieldValue(
             OgnlCache.class, null, "expressionCache");
@@ -136,5 +139,51 @@ public class MybatisTest extends MatcherBaseTest {
     public void testGetValue() {
         assertEquals("STATIC_VALUE_1", OgnlCache.getValue(
             "@org.apache.ibatis.scripting.xmltags.MybatisTest@TEST_STATIC_VALUE_1", null));
+    }
+
+    @Test
+    public void testClassForName() throws Exception {
+
+        DefaultClassResolver defaultClassResolver = new DefaultClassResolver();
+        ConcurrentHashMap<ClassLoader, ConcurrentHashMap<String, Class<?>>> classes = (ConcurrentHashMap) getFieldValue(
+            DefaultClassResolver.class, defaultClassResolver, "classes");
+
+        currentThread()
+            .setContextClassLoader(DefaultClassResolver.class.getClassLoader().getParent());
+        assertEquals(String.class, defaultClassResolver.classForName(String.class.getName(), null));
+        assertEquals(1, classes.size());
+
+        currentThread().setContextClassLoader(null);
+        assertEquals(DefaultClassResolver.class,
+            defaultClassResolver.classForName(DefaultClassResolver.class.getName(), null));
+        assertEquals(2, classes.size());
+
+        assertEquals(OgnlContext.class,
+            defaultClassResolver.classForName(OgnlContext.class.getName(), null));
+        assertEquals(OgnlContext.class,
+            defaultClassResolver.classForName(OgnlContext.class.getName(), null));
+        assertEquals(AdapterUtils.class,
+            defaultClassResolver.classForName(AdapterUtils.class.getName(), null));
+        assertEquals(2, classes.size());
+        assertEquals(3, classes.get(DefaultClassResolver.class.getClassLoader()).size());
+    }
+
+    @Test
+    public void testDefaultClassResolverClearByClassLoader() throws Exception {
+
+        DefaultClassResolver defaultClassResolver = new DefaultClassResolver();
+        ConcurrentHashMap<ClassLoader, ConcurrentHashMap<String, Class<?>>> classes = (ConcurrentHashMap) getFieldValue(
+            DefaultClassResolver.class, defaultClassResolver, "classes");
+
+        currentThread().setContextClassLoader(this.getClass().getClassLoader());
+        assertEquals(0, classes.size());
+        assertEquals(String.class, defaultClassResolver.classForName(String.class.getName(), null));
+        assertEquals(1, classes.size());
+
+        currentThread().setContextClassLoader(this.getClass().getClassLoader().getParent());
+        assertEquals(String.class, defaultClassResolver.classForName(String.class.getName(), null));
+        assertEquals(2, classes.size());
+        defaultClassResolver.clearByClassLoader(MybatisTest.class.getClassLoader());
+        assertEquals(1, classes.size());
     }
 }
