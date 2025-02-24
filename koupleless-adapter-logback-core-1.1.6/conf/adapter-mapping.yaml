@@ -1,4 +1,4 @@
-version: 1.2.4
+version: 1.2.7
 adapterMappings:
   - matcher:
       groupId: ch.qos.logback
