@@ -43,7 +43,7 @@ public class MatcherTest extends MatcherBaseTest {
      *       artifactId: logback-classic
      *       versionRange: "[1.4.12,)"
      *     adapter:
-     *       artifactId: koupleless-adapter-logback-classic-1.4.12
+     *       artifactId: koupleless-adapter-logback-core-1.4.12
      *       groupId: com.alipay.sofa.koupleless
      */
     @Test
