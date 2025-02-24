@@ -109,8 +109,8 @@
 
 <!--        summarize all configurations-->
         <module>koupleless-adapter-configs</module>
-        <module>koupleless-adapter-logback-classic-1.4.12</module>
-        <module>koupleless-adapter-logback-classic-1.1.6</module>
+        <module>koupleless-adapter-logback-core-1.4.12</module>
+        <module>koupleless-adapter-logback-core-1.1.6</module>
 
     </modules>
 
