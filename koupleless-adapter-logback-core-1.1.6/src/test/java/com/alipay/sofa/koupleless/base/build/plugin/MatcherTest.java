@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.koupleless.base.build.plugin;
 
-import edu.emory.mathcs.backport.java.util.Collections;
 import org.apache.maven.model.Dependency;
 
 import org.eclipse.aether.version.InvalidVersionSpecificationException;
@@ -44,17 +43,17 @@ public class MatcherTest extends MatcherBaseTest {
      *       artifactId: logback-classic
      *       versionRange: "(,1.4.12)"
      *     adapter:
-     *       artifactId: koupleless-adapter-logback-classic-1.1.6
+     *       artifactId: koupleless-adapter-logback-core-1.1.6
      *       groupId: com.alipay.sofa.koupleless
      */
     @Test
     public void testMatcher() throws InvalidVersionSpecificationException {
         List<Dependency> res = getMatcherAdaptor(
-            mockArtifact("ch.qos.logback", "logback-classic", "1.1.11"));
+            mockArtifact("ch.qos.logback", "logback-core", "1.1.11"));
         assertEquals(1, res.size());
-        assertEquals(res.get(0).getArtifactId(), "koupleless-adapter-logback-classic-1.1.6");
+        assertEquals(res.get(0).getArtifactId(), "koupleless-adapter-logback-core-1.1.6");
 
-        res = getMatcherAdaptor(mockArtifact("ch.qos.logback", "logback-classic", "1.4.12"));
+        res = getMatcherAdaptor(mockArtifact("ch.qos.logback", "logback-core", "1.4.12"));
         assertEquals(0, res.size());
     }
 }

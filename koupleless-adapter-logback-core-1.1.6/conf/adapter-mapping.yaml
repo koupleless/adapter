@@ -1,9 +1,9 @@
-version: 1.2.4
+version: 1.2.7
 adapterMappings:
   - matcher:
       groupId: ch.qos.logback
-      artifactId: logback-classic
+      artifactId: logback-core
       versionRange: "(,1.4.12)"
     adapter:
-      artifactId: koupleless-adapter-logback-classic-1.1.6
+      artifactId: koupleless-adapter-logback-core-1.1.6
       groupId: com.alipay.sofa.koupleless
