@@ -16,14 +16,25 @@
  */
 package com.alipay.sofa.koupleless.base.build.plugin;
 
-import edu.emory.mathcs.backport.java.util.Collections;
+import com.alipay.sofa.koupleless.base.build.plugin.model.KouplelessAdapterConfig;
+import com.alipay.sofa.koupleless.base.build.plugin.model.MavenDependencyAdapterMapping;
 import org.apache.maven.model.Dependency;
 
+import org.eclipse.aether.artifact.Artifact;
+import org.eclipse.aether.artifact.DefaultArtifact;
 import org.eclipse.aether.version.InvalidVersionSpecificationException;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 
@@ -57,4 +68,40 @@ public class MatcherTest extends MatcherBaseTest {
         assertEquals(0, res.size());
     }
 
+    @Test
+    public void testSourceToPatch() throws Exception {
+        // 1. scan all java files
+        String testRootPath = this.getClass().getClassLoader().getResource("").getFile();
+        String srcRootPath = Paths.get(testRootPath, "..", "..", "src", "main", "java")
+            .toAbsolutePath().toString();
+
+        List<Path> javaFiles = Files.walk(Paths.get(srcRootPath)).filter(Files::isRegularFile)
+            .filter(p -> p.toString().endsWith(".java")).collect(Collectors.toList());
+
+        Map<String, File> javaFileMap = new java.util.HashMap<>();
+        for (Path javaFile : javaFiles) {
+            String javaPackageAndName = javaFile.toString().replaceFirst(srcRootPath + "/", "");
+            javaFileMap.put(javaPackageAndName, javaFile.toFile());
+        }
+
+        // 2. get all source from the adapter
+        List<Artifact> artifacts = parseMatcherVersion(config);
+        for (Artifact artifact : artifacts) {
+            File sourceJarFile = artifact.getFile();
+            Map<String, byte[]> entryToContent = getFileContentAsLines(sourceJarFile,
+                Pattern.compile("(.*\\.java$)"));
+        }
+    }
+
+    private List<Artifact> parseMatcherVersion(KouplelessAdapterConfig config) throws Exception {
+        List<Artifact> artifacts = new ArrayList<>();
+        for (MavenDependencyAdapterMapping mapping : config.getAdapterMappings()) {
+            String version = parseArtifactVersion(mapping);
+            Artifact artifact = new DefaultArtifact(mapping.getMatcher().getGroupId(),
+                mapping.getMatcher().getArtifactId(), "sources", "jar", version);
+
+            artifacts.add(resolveArtifacts(artifact).getArtifact());
+        }
+        return artifacts;
+    }
 }
