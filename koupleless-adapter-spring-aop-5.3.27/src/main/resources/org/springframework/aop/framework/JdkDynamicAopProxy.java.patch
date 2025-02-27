@@ -1,0 +1,42 @@
+diff --git a/org/springframework/aop/framework/JdkDynamicAopProxy.java b/org/springframework/aop/framework/JdkDynamicAopProxy.java
+index 84bd578..ae785aa 100644
+--- a/org/springframework/aop/framework/JdkDynamicAopProxy.java
++++ b/org/springframework/aop/framework/JdkDynamicAopProxy.java
+@@ -118,17 +118,31 @@
+ 		return getProxy(ClassUtils.getDefaultClassLoader());
+ 	}
+ 
+-	@Override
++    // modified by koupleless adapter
+ 	public Object getProxy(@Nullable ClassLoader classLoader) {
+ 		if (logger.isTraceEnabled()) {
+ 			logger.trace("Creating JDK dynamic proxy: " + this.advised.getTargetSource());
+ 		}
+-		if (classLoader == null || classLoader.getParent() == null) {
+-			// JDK bootstrap loader or platform loader suggested ->
+-			// use higher-level loader which can see Spring infrastructure classes
+-			classLoader = getClass().getClassLoader();
++
++        return Proxy.newProxyInstance(this.determineClassLoader(classLoader), this.proxiedInterfaces, this);
+ 		}
+-		return Proxy.newProxyInstance(classLoader, this.proxiedInterfaces, this);
++
++    private ClassLoader determineClassLoader(@Nullable ClassLoader classLoader) {
++        if (classLoader == null) {
++            return this.getClass().getClassLoader();
++        } else {
++            if (classLoader.getParent() == null) {
++                ClassLoader aopClassLoader = this.getClass().getClassLoader();
++
++                for(ClassLoader aopParent = aopClassLoader.getParent(); aopParent != null; aopParent = aopParent.getParent()) {
++                    if (classLoader == aopParent) {
++                        return aopClassLoader;
++                    }
++                }
++            }
++
++            return classLoader;
++        }
+ 	}
+ 
+ 	/**

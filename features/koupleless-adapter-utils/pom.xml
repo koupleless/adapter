@@ -23,6 +23,10 @@
             <groupId>com.alipay.sofa.koupleless</groupId>
             <artifactId>koupleless-base-build-plugin</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-resolver-provider</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
