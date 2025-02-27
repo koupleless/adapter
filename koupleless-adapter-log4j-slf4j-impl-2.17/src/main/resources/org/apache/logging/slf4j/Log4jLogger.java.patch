@@ -1,5 +1,5 @@
 diff --git a/org/apache/logging/slf4j/Log4jLogger.java b/org/apache/logging/slf4j/Log4jLogger.java
-index 1fa8080..bd21076 100644
+index 1fa8080..a988fa8 100644
 --- a/org/apache/logging/slf4j/Log4jLogger.java
 +++ b/org/apache/logging/slf4j/Log4jLogger.java
 @@ -20,6 +20,8 @@
@@ -19,7 +19,7 @@ index 1fa8080..bd21076 100644
  import org.apache.logging.log4j.util.LoaderUtil;
  import org.slf4j.Marker;
  import org.slf4j.MarkerFactory;
-@@ -45,319 +48,321 @@
+@@ -45,319 +48,320 @@
      private static final EventDataConverter CONVERTER = createConverter();
  
      private final boolean eventLogger;
@@ -395,39 +395,22 @@ index 1fa8080..bd21076 100644
      }
  
      @Override
--    public void log(final Marker marker, final String fqcn, final int level, final String message, final Object[] params, Throwable throwable) {
-+    public void log(final Marker marker, final String fqcn, final int level, final String message,
-+                    final Object[] params, Throwable throwable) {
+     public void log(final Marker marker, final String fqcn, final int level, final String message, final Object[] params, Throwable throwable) {
          final Level log4jLevel = getLevel(level);
          final org.apache.logging.log4j.Marker log4jMarker = getMarker(marker);
 +        ExtendedLogger logger = getLogger();
  
          if (!logger.isEnabled(log4jLevel, log4jMarker, message, params)) {
              return;
-@@ -382,7 +387,8 @@
-         } else if (marker instanceof Log4jMarker) {
-             return ((Log4jMarker) marker).getLog4jMarker();
-         } else {
--            final Log4jMarkerFactory factory = (Log4jMarkerFactory) StaticMarkerBinder.SINGLETON.getMarkerFactory();
-+            final Log4jMarkerFactory factory = (Log4jMarkerFactory) StaticMarkerBinder.SINGLETON
-+                .getMarkerFactory();
-             return ((Log4jMarker) factory.getMarker(marker)).getLog4jMarker();
-         }
-     }
-@@ -396,10 +402,10 @@
-      * Always treat de-serialization as a full-blown constructor, by validating the final state of
-      * the de-serialized object.
-      */
--    private void readObject(final ObjectInputStream aInputStream) throws ClassNotFoundException, IOException {
-+    private void readObject(final ObjectInputStream aInputStream) throws ClassNotFoundException,
-+                                                                  IOException {
+@@ -399,7 +403,6 @@
+     private void readObject(final ObjectInputStream aInputStream) throws ClassNotFoundException, IOException {
          // always perform the default de-serialization first
          aInputStream.defaultReadObject();
 -        logger = LogManager.getContext().getLogger(name);
      }
  
      /**
-@@ -434,4 +440,24 @@
+@@ -434,4 +437,24 @@
          }
          return Level.ERROR;
      }

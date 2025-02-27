@@ -358,8 +358,7 @@ public class Log4jLogger implements LocationAwareLogger, Serializable {
     }
 
     @Override
-    public void log(final Marker marker, final String fqcn, final int level, final String message,
-                    final Object[] params, Throwable throwable) {
+    public void log(final Marker marker, final String fqcn, final int level, final String message, final Object[] params, Throwable throwable) {
         final Level log4jLevel = getLevel(level);
         final org.apache.logging.log4j.Marker log4jMarker = getMarker(marker);
         ExtendedLogger logger = getLogger();
@@ -387,8 +386,7 @@ public class Log4jLogger implements LocationAwareLogger, Serializable {
         } else if (marker instanceof Log4jMarker) {
             return ((Log4jMarker) marker).getLog4jMarker();
         } else {
-            final Log4jMarkerFactory factory = (Log4jMarkerFactory) StaticMarkerBinder.SINGLETON
-                .getMarkerFactory();
+            final Log4jMarkerFactory factory = (Log4jMarkerFactory) StaticMarkerBinder.SINGLETON.getMarkerFactory();
             return ((Log4jMarker) factory.getMarker(marker)).getLog4jMarker();
         }
     }
@@ -402,8 +400,7 @@ public class Log4jLogger implements LocationAwareLogger, Serializable {
      * Always treat de-serialization as a full-blown constructor, by validating the final state of
      * the de-serialized object.
      */
-    private void readObject(final ObjectInputStream aInputStream) throws ClassNotFoundException,
-                                                                  IOException {
+    private void readObject(final ObjectInputStream aInputStream) throws ClassNotFoundException, IOException {
         // always perform the default de-serialization first
         aInputStream.defaultReadObject();
     }
