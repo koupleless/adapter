@@ -74,6 +74,7 @@
 
     <modules>
 <!--        jdk 8      -->
+        <module>koupleless-adapter-log4j-slf4j-impl-2.17</module>
         <module>koupleless-adapter-log4j2-spring-starter-2.1</module>
         <module>koupleless-adapter-log4j2-spring-starter-2.4</module>
         <module>koupleless-adapter-log4j2-spring-starter-2.7</module>
@@ -278,12 +279,12 @@
                 <groupId>org.apache.maven.resolver</groupId>
                 <artifactId>maven-resolver-transport-http</artifactId>
                 <version>1.9.22</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>*</artifactId>
-                    </exclusion>
-                </exclusions>
+<!--                <exclusions>-->
+<!--                    <exclusion>-->
+<!--                        <groupId>org.slf4j</groupId>-->
+<!--                        <artifactId>*</artifactId>-->
+<!--                    </exclusion>-->
+<!--                </exclusions>-->
             </dependency>
             <dependency>
                 <groupId>org.apache.maven.resolver</groupId>
