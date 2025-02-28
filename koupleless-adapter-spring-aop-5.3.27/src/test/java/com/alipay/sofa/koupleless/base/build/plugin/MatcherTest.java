@@ -35,6 +35,11 @@ public class MatcherTest extends MatcherBaseTest {
     public MatcherTest() throws IOException {
     }
 
+    @Test
+    public void testGenSourceToPatch() throws Exception {
+        checkInvalidSources();
+    }
+
     /**
      * test for adaptor: koupleless-adapter-spring-aop-5.3.27
      * pattern:

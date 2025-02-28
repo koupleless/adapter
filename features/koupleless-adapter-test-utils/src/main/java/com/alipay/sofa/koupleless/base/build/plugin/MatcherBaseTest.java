@@ -40,6 +40,7 @@ import org.eclipse.aether.version.InvalidVersionSpecificationException;
 import org.eclipse.aether.version.Version;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.api.errors.PatchApplyException;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.diff.RawTextComparator;
@@ -99,8 +100,7 @@ public abstract class MatcherBaseTest {
     public MatcherBaseTest() throws IOException {
     }
 
-    @Test
-    public void testGenSourceToPatch() throws Exception {
+    protected void checkInvalidSources() throws Exception {
         // 1. scan all java files from this adapter
         String testRootPath = this.getClass().getClassLoader().getResource("").getFile();
         String srcRootPath = Paths.get(testRootPath, "..", "..", "src", "main", "java")
@@ -154,21 +154,35 @@ public abstract class MatcherBaseTest {
                     Pattern.compile("(.*\\.java$)"));
                 if (entryToContent.containsKey(javaPackageAndName)) {
                     byte[] sourceContent = entryToContent.get(javaPackageAndName);
-                    List<String> sourceLines = Arrays.asList(new String(sourceContent).split("\\r?\\n"));
+                    List<String> sourceLines = Arrays
+                        .asList(new String(sourceContent).split("\\r?\\n"));
                     adapterPatch.setSourceLines(sourceLines);
                     try {
                         checkGitPathValid(git, adapterPatch);
                     } catch (GitAPIException e) {
-                        invalidSources.add(String.format("%s:%s:%s", artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion()));
+                        invalidSources.add(String.format("%s:%s:%s:%s: patch failed.",
+                            artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion(),
+                            adapterPatch.getFileName()));
+                    } catch (RuntimeException e) {
+                        invalidSources
+                            .add(String.format("%s:%s:%s:%s: contains unexpected diffs %s.",
+                                artifact.getGroupId(), artifact.getArtifactId(),
+                                artifact.getVersion(), adapterPatch.getFileName(), e.getMessage()));
                     } finally {
-                        git.reset().addPath(adapterPatch.getSubPath() + "/" + adapterPatch.getFileName()).call();
-                        git.checkout().addPath(adapterPatch.getSubPath() + "/" + adapterPatch.getFileName()).call();
+                        git.reset()
+                            .addPath(adapterPatch.getSubPath() + "/" + adapterPatch.getFileName())
+                            .call();
+                        git.checkout()
+                            .addPath(adapterPatch.getSubPath() + "/" + adapterPatch.getFileName())
+                            .call();
                     }
                 }
             }
 
-            Assert.assertTrue(String.format("this adapter invalid for %s, please create a new adapter.", String.join(",", invalidSources)),
-                    invalidSources.isEmpty());
+            Assert.assertTrue(
+                String.format("this adapter invalid for \n%s,\n please create a new adapter.",
+                    String.join("\n", invalidSources)),
+                invalidSources.isEmpty());
         }
     }
 
@@ -190,6 +204,12 @@ public abstract class MatcherBaseTest {
         return adapterPatchs;
     }
 
+    /**
+     * 检查 git apply 是否有效，先拷贝 source 源码文件，然后应用 patch，然后检查是否有 diff
+     * @param git
+     * @param adapterPatch
+     * @throws Exception
+     */
     private void checkGitPathValid(Git git, AdapterPatch adapterPatch) throws Exception {
         Path gitRoot = git.getRepository().getDirectory().getParentFile().toPath();
         List<String> patchLines = adapterPatch.getPatchLines();
@@ -215,14 +235,12 @@ public abstract class MatcherBaseTest {
         for (DiffEntry diffEntry : diffEntries) {
             formatter.format(diffEntry);
             String diffContent = outputStream.toString();
-            List<String> diffLines = Arrays.
-                    asList(diffContent.split("\\r?\\n"));
-            Assert.assertEquals("there should no diff here.", diffLines.size(), 4);
-            // reset outputStream
+            List<String> diffLines = Arrays.asList(diffContent.split("\\r?\\n"));
             outputStream.reset();
+            if (diffLines.size() > 4) {
+                throw new RuntimeException("contains unexpected diffs: " + diffContent);
+            }
         }
-
-        git.checkout().addPath(adapterPatch.getSubPath() + "/" + adapterPatch.getFileName()).call();
     }
 
     private List<String> generateGitPatch(Git git, AdapterPatch adapterPatch) throws Exception {
