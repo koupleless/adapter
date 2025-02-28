@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.koupleless.base.build.plugin;
 
-import edu.emory.mathcs.backport.java.util.Collections;
 import org.apache.maven.model.Dependency;
 
 import org.eclipse.aether.version.InvalidVersionSpecificationException;
@@ -53,12 +52,12 @@ public class MatcherTest extends MatcherBaseTest {
         assertEquals(res.get(0).getArtifactId(), "koupleless-adapter-log4j-slf4j-impl-2.17");
 
         res = getMatcherAdaptor(
-                mockArtifact("org.apache.logging.log4j", "log4j-slf4j-impl", "2.18.0"));
+            mockArtifact("org.apache.logging.log4j", "log4j-slf4j-impl", "2.18.0"));
         assertEquals(1, res.size());
         assertEquals(res.get(0).getArtifactId(), "koupleless-adapter-log4j-slf4j-impl-2.17");
 
         res = getMatcherAdaptor(
-                mockArtifact("org.apache.logging.log4j", "log4j-slf4j-impl", "2.19.0"));
+            mockArtifact("org.apache.logging.log4j", "log4j-slf4j-impl", "2.19.0"));
         assertEquals(0, res.size());
     }
 
