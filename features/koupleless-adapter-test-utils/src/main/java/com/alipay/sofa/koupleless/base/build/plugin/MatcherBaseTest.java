@@ -146,26 +146,29 @@ public abstract class MatcherBaseTest {
         for (AdapterPatch adapterPatch : adapterPatchs) {
             String javaPackageAndName = adapterPatch.getSubPath() + "/"
                                         + adapterPatch.getFileName();
+
+            List<String> invalidSources = new ArrayList<>();
             for (org.eclipse.aether.artifact.Artifact artifact : artifacts) {
                 File sourceJarFile = artifact.getFile();
                 Map<String, byte[]> entryToContent = getFileContentAsLines(sourceJarFile,
                     Pattern.compile("(.*\\.java$)"));
                 if (entryToContent.containsKey(javaPackageAndName)) {
                     byte[] sourceContent = entryToContent.get(javaPackageAndName);
-                    List<String> sourceLines = edu.emory.mathcs.backport.java.util.Arrays
-                        .asList(new String(sourceContent).split("\\r?\\n"));
+                    List<String> sourceLines = Arrays.asList(new String(sourceContent).split("\\r?\\n"));
                     adapterPatch.setSourceLines(sourceLines);
                     try {
                         checkGitPathValid(git, adapterPatch);
                     } catch (GitAPIException e) {
-                        throw new RuntimeException(String.format(
-                            "this adapter not valid for %s:%s:%s, please download the %s:%s:%s sources jar and make a new adapter.",
-                            artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion(),
-                            artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion()),
-                            e);
+                        invalidSources.add(String.format("%s:%s:%s", artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion()));
+                    } finally {
+                        git.reset().addPath(adapterPatch.getSubPath() + "/" + adapterPatch.getFileName()).call();
+                        git.checkout().addPath(adapterPatch.getSubPath() + "/" + adapterPatch.getFileName()).call();
                     }
                 }
             }
+
+            Assert.assertTrue(String.format("this adapter invalid for %s, please create a new adapter.", String.join(",", invalidSources)),
+                    invalidSources.isEmpty());
         }
     }
 
@@ -212,8 +215,8 @@ public abstract class MatcherBaseTest {
         for (DiffEntry diffEntry : diffEntries) {
             formatter.format(diffEntry);
             String diffContent = outputStream.toString();
-            List<String> diffLines = edu.emory.mathcs.backport.java.util.Arrays
-                .asList(diffContent.split("\\r?\\n"));
+            List<String> diffLines = Arrays.
+                    asList(diffContent.split("\\r?\\n"));
             Assert.assertEquals("there should no diff here.", diffLines.size(), 4);
             // reset outputStream
             outputStream.reset();
