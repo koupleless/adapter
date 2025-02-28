@@ -1,0 +1,9 @@
+version: 1.2.7
+adapterMappings:
+  - matcher:
+      groupId: org.apache.logging.log4j
+      artifactId: log4j-slf4j-impl
+      versionRange: "[2.11.0,2.13.1)"
+    adapter:
+      artifactId: koupleless-adapter-log4j-slf4j-impl-2.11
+      groupId: com.alipay.sofa.koupleless
