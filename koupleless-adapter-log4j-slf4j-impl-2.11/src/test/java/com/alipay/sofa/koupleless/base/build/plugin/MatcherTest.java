@@ -36,6 +36,11 @@ public class MatcherTest extends MatcherBaseTest {
     public MatcherTest() throws IOException {
     }
 
+    @Test
+    public void testGenSourceToPatch() throws Exception {
+        checkInvalidSources();
+    }
+
     /**
      * test for adaptor: koupleless-adapter-log4j2-spring-starter-2.1
      *     matcher:
@@ -48,17 +53,17 @@ public class MatcherTest extends MatcherBaseTest {
     @Test
     public void testMatcher15() throws InvalidVersionSpecificationException {
         List<Dependency> res = getMatcherAdaptor(
-            mockArtifact("org.apache.logging.log4j", "log4j-slf4j-impl", "2.17.0"));
+            mockArtifact("org.apache.logging.log4j", "log4j-slf4j-impl", "2.11.0"));
         assertEquals(1, res.size());
-        assertEquals(res.get(0).getArtifactId(), "koupleless-adapter-log4j-slf4j-impl-2.7");
+        assertEquals(res.get(0).getArtifactId(), "koupleless-adapter-log4j-slf4j-impl-2.11");
 
         res = getMatcherAdaptor(
-            mockArtifact("org.apache.logging.log4j", "log4j-slf4j-impl", "2.18.0"));
+            mockArtifact("org.apache.logging.log4j", "log4j-slf4j-impl", "2.12.0"));
         assertEquals(1, res.size());
-        assertEquals(res.get(0).getArtifactId(), "koupleless-adapter-log4j-slf4j-impl-2.7");
+        assertEquals(res.get(0).getArtifactId(), "koupleless-adapter-log4j-slf4j-impl-2.11");
 
         res = getMatcherAdaptor(
-            mockArtifact("org.apache.logging.log4j", "log4j-slf4j-impl", "2.19.0"));
+            mockArtifact("org.apache.logging.log4j", "log4j-slf4j-impl", "2.14.0"));
         assertEquals(0, res.size());
     }
 
