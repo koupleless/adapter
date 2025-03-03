@@ -254,7 +254,7 @@
             <dependency>
                 <groupId>com.alipay.sofa.koupleless</groupId>
                 <artifactId>koupleless-base-build-plugin</artifactId>
-                <version>1.4.1</version>
+                <version>1.4.2-SNAPSHOT</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.apache.maven</groupId>
