@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.koupleless.base.build.plugin;
 
-import edu.emory.mathcs.backport.java.util.Collections;
 import org.apache.maven.model.Dependency;
 
 import org.eclipse.aether.version.InvalidVersionSpecificationException;
