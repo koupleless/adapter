@@ -10,7 +10,7 @@
 
     <properties>
         <revision>1.2.7</revision>
-        <koupleless.runime.version>1.3.0</koupleless.runime.version>
+        <koupleless.runime.version>1.4.2-SNAPSHOT</koupleless.runime.version>
         <project.encoding>UTF-8</project.encoding>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <license.maven.plugin>3.0</license.maven.plugin>
@@ -254,7 +254,7 @@
             <dependency>
                 <groupId>com.alipay.sofa.koupleless</groupId>
                 <artifactId>koupleless-base-build-plugin</artifactId>
-                <version>1.4.2-SNAPSHOT</version>
+                <version>${koupleless.runime.version}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.apache.maven</groupId>

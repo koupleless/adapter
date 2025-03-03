@@ -22,10 +22,33 @@ import java.util.List;
 
 @Data
 public class AdapterPatch {
+    /**
+     * 当前修改增强后文件的根路径，一般为该类所在 bundle 的根目录
+     */
     private String       rootPath;
+
+    /**
+     * 当前修改增强后文件的名称
+     */
     private String       fileName;
+
+    /**
+     * 当前修改增强后文件的 package 名称
+     */
     private String       subPath;
+
+    /**
+     * 当前增强文件来源的 maven jar sources 文件内容
+     */
     private List<String> sourceLines;
+
+    /**
+     * 当前增强文件的内容
+     */
     private List<String> adaptedLines;
+
+    /**
+     * 当前增强部分的 diff patch 内容
+     */
     private List<String> patchLines;
 }
