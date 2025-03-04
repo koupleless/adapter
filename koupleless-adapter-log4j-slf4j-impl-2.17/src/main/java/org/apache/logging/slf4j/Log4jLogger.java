@@ -1,20 +1,27 @@
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements.  See the NOTICE file distributed with
+ * contributor license agreements. See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
+ * The ASF licenses this file to You under the Apache license, Version 2.0
  * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
+ * the License. You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * See the license for the specific language governing permissions and
+ * limitations under the license.
  */
 package org.apache.logging.slf4j;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -29,30 +36,21 @@ import org.slf4j.MarkerFactory;
 import org.slf4j.impl.StaticMarkerBinder;
 import org.slf4j.spi.LocationAwareLogger;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 /**
  * SLF4J logger implementation that uses Log4j.
  */
 public class Log4jLogger implements LocationAwareLogger, Serializable {
 
-    public static final String                               FQCN               = Log4jLogger.class
-        .getName();
+    public static final String FQCN = Log4jLogger.class.getName();
 
-    private static final long                                serialVersionUID   = 7869000638091304316L;
-    private static final Marker                              EVENT_MARKER       = MarkerFactory
-        .getMarker("EVENT");
-    private static final EventDataConverter                  CONVERTER          = createConverter();
+    private static final long serialVersionUID = 7869000638091304316L;
+    private static final Marker EVENT_MARKER = MarkerFactory.getMarker("EVENT");
+    private static final EventDataConverter CONVERTER = createConverter();
 
-    private final boolean                                    eventLogger;
+    private final           boolean                          eventLogger;
     private transient final Map<ClassLoader, ExtendedLogger> loggerMap          = new ConcurrentHashMap<>();
-    private static final Map<ClassLoader, LoggerContext>     LOGGER_CONTEXT_MAP = new ConcurrentHashMap<>();
-    private final String                                     name;
+    private static final    Map<ClassLoader, LoggerContext>  LOGGER_CONTEXT_MAP = new ConcurrentHashMap<>();
+    private final String name;
 
     public Log4jLogger(final ExtendedLogger logger, final String name) {
         this.eventLogger = "EventLogger".equals(name);
@@ -360,8 +358,7 @@ public class Log4jLogger implements LocationAwareLogger, Serializable {
     }
 
     @Override
-    public void log(final Marker marker, final String fqcn, final int level, final String message,
-                    final Object[] params, Throwable throwable) {
+    public void log(final Marker marker, final String fqcn, final int level, final String message, final Object[] params, Throwable throwable) {
         final Level log4jLevel = getLevel(level);
         final org.apache.logging.log4j.Marker log4jMarker = getMarker(marker);
         ExtendedLogger logger = getLogger();
@@ -389,8 +386,7 @@ public class Log4jLogger implements LocationAwareLogger, Serializable {
         } else if (marker instanceof Log4jMarker) {
             return ((Log4jMarker) marker).getLog4jMarker();
         } else {
-            final Log4jMarkerFactory factory = (Log4jMarkerFactory) StaticMarkerBinder.SINGLETON
-                .getMarkerFactory();
+            final Log4jMarkerFactory factory = (Log4jMarkerFactory) StaticMarkerBinder.SINGLETON.getMarkerFactory();
             return ((Log4jMarker) factory.getMarker(marker)).getLog4jMarker();
         }
     }
@@ -404,8 +400,7 @@ public class Log4jLogger implements LocationAwareLogger, Serializable {
      * Always treat de-serialization as a full-blown constructor, by validating the final state of
      * the de-serialized object.
      */
-    private void readObject(final ObjectInputStream aInputStream) throws ClassNotFoundException,
-                                                                  IOException {
+    private void readObject(final ObjectInputStream aInputStream) throws ClassNotFoundException, IOException {
         // always perform the default de-serialization first
         aInputStream.defaultReadObject();
     }

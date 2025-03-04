@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.koupleless.base.build.plugin;
 
-import edu.emory.mathcs.backport.java.util.Collections;
 import org.apache.maven.model.Dependency;
 
 import org.eclipse.aether.version.InvalidVersionSpecificationException;
@@ -34,6 +33,11 @@ import static org.junit.Assert.assertEquals;
 public class MatcherTest extends MatcherBaseTest {
 
     public MatcherTest() throws IOException {
+    }
+
+    @Test
+    public void testGenSourceToPatch() throws Exception {
+        checkInvalidSources();
     }
 
     /**

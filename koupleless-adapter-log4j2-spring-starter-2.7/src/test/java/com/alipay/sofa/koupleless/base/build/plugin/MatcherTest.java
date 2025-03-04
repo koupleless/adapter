@@ -16,7 +16,6 @@
  */
 package com.alipay.sofa.koupleless.base.build.plugin;
 
-import edu.emory.mathcs.backport.java.util.Collections;
 import org.apache.maven.model.Dependency;
 
 import org.eclipse.aether.version.InvalidVersionSpecificationException;
@@ -56,5 +55,4 @@ public class MatcherTest extends MatcherBaseTest {
             mockArtifact("org.springframework.boot", "spring-boot-starter-log4j2", "3.0.0"));
         assertEquals(0, res.size());
     }
-
 }
