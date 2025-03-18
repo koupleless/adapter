@@ -19,8 +19,6 @@ package com.alipay.sofa.koupleless.adapter;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 
-import static java.lang.Thread.currentThread;
-
 /**
  * @author lylingzhen@github.com
  * @version AdapterUtils.java, v 0.1 2025年01月15日 上午11:39 lylingzhen
@@ -61,8 +59,8 @@ public class AdapterUtils {
             return Thread.currentThread().getContextClassLoader();
         } else {
             // 绕开权限检查
-            return AccessController.doPrivileged(
-                    (PrivilegedAction<ClassLoader>) () -> Thread.currentThread().getContextClassLoader());
+            return AccessController.doPrivileged((PrivilegedAction<ClassLoader>) () -> Thread
+                .currentThread().getContextClassLoader());
         }
     }
 
@@ -78,8 +76,8 @@ public class AdapterUtils {
             return ClassLoader.getSystemClassLoader();
         } else {
             // 绕开权限检查
-            return AccessController.doPrivileged(
-                    (PrivilegedAction<ClassLoader>) ClassLoader::getSystemClassLoader);
+            return AccessController
+                .doPrivileged((PrivilegedAction<ClassLoader>) ClassLoader::getSystemClassLoader);
         }
     }
 }
