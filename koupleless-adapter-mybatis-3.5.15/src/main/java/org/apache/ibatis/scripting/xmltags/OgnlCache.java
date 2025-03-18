@@ -24,7 +24,7 @@ import org.apache.ibatis.ognl.OgnlException;
 
 import org.apache.ibatis.builder.BuilderException;
 
-import static com.alipay.sofa.koupleless.adapter.AdapterUtils.findClassLoader;
+import static com.alipay.sofa.koupleless.adapter.AdapterUtils.getClassLoader;
 
 /**
  * Caches OGNL parsed expressions.
@@ -58,7 +58,7 @@ public final class OgnlCache {
 
     private static Object parseExpression(String expression) throws OgnlException {
         // patch begin
-        ClassLoader classLoader = findClassLoader();
+        ClassLoader classLoader = getClassLoader();
         ConcurrentHashMap<String, Object> innerMap = expressionCache.computeIfAbsent(classLoader,
             cl -> new ConcurrentHashMap<>());
         Object node = innerMap.get(expression);

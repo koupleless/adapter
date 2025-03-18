@@ -18,7 +18,7 @@ package org.apache.ibatis.ognl;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.alipay.sofa.koupleless.adapter.AdapterUtils.findClassLoader;
+import static com.alipay.sofa.koupleless.adapter.AdapterUtils.getClassLoader;
 
 /**
  * Default class resolution.  Uses Class.forName() to look up classes by name.
@@ -39,7 +39,7 @@ public class DefaultClassResolver implements ClassResolver {
     public <T> Class<T> classForName(String className,
                                      OgnlContext context) throws ClassNotFoundException {
         // patch begin
-        ClassLoader classLoader = findClassLoader();
+        ClassLoader classLoader = getClassLoader();
         ConcurrentHashMap<String, Class<?>> innerMap = classes.computeIfAbsent(classLoader,
             cl -> new ConcurrentHashMap<>(101));
         Class<?> result = innerMap.get(className);
