@@ -31,6 +31,10 @@ public class StaticFieldMapWrapper<T> {
         this.getDefaultMethod = getDefaultMethod;
     }
 
+    public StaticFieldMapWrapper(T t) {
+        put(t);
+    }
+
     public void put(T t) {
         if (Objects.nonNull(Thread.currentThread().getContextClassLoader()) && Objects.nonNull(t)) {
             classLoaderTMap.put(Thread.currentThread().getContextClassLoader(), t);
