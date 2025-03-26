@@ -58,9 +58,7 @@ public class StaticFieldMapWrapper<T> {
     }
 
     public void put(ClassLoader classLoader, T t) {
-        if (Objects.nonNull(Thread.currentThread().getContextClassLoader()) && Objects.nonNull(t)) {
-            classLoaderTMap.put(classLoader, t);
-        }
+        classLoaderTMap.put(classLoader, t);
     }
 
     public T get() {
