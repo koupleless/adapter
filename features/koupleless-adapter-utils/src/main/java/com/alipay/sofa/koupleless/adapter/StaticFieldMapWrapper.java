@@ -57,6 +57,12 @@ public class StaticFieldMapWrapper<T> {
         }
     }
 
+    public void put(ClassLoader classLoader, T t) {
+        if (Objects.nonNull(Thread.currentThread().getContextClassLoader()) && Objects.nonNull(t)) {
+            classLoaderTMap.put(classLoader, t);
+        }
+    }
+
     public T get() {
         ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         if (Objects.isNull(contextClassLoader)) {
@@ -66,6 +72,18 @@ public class StaticFieldMapWrapper<T> {
         if (t == null) {
             // 可能是tomcat的Classloader需要从parent取出BizClassLoader
             ClassLoader parent = contextClassLoader.getParent();
+            if (parent != null) {
+                t = classLoaderTMap.get(parent);
+            }
+        }
+        return t;
+    }
+
+    public T get(ClassLoader classLoader) {
+        T t = classLoaderTMap.get(classLoader);
+        if (t == null) {
+            // 可能是tomcat的Classloader需要从parent取出BizClassLoader
+            ClassLoader parent = classLoader.getParent();
             if (parent != null) {
                 t = classLoaderTMap.get(parent);
             }
