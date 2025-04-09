@@ -36,8 +36,8 @@ public class BizRunnableTest {
         Runnable runnable = () -> {
             recordClassLoaders[0] = Thread.currentThread().getContextClassLoader();
             bizContexts[0] = BizContextHolder.get();
-            System.out.println(String.format("classLoader: %s; bizContext: %s",
-                recordClassLoaders[0], bizContexts[0]));
+            System.out.printf("classLoader: %s; bizContext: %s%n",
+                recordClassLoaders[0], bizContexts[0]);
         };
 
         ExecutorService executor = Executors.newSingleThreadExecutor();

@@ -35,6 +35,12 @@ public class BizRunnable implements Runnable {
         this.bizContext = BizContextHolder.cloneBizContext();
     }
 
+    public BizRunnable(Runnable runnable, ClassLoader classLoader) {
+        this.runnable = runnable;
+        this.classLoader = classLoader;
+        this.bizContext = BizContextHolder.cloneBizContext();
+    }
+
     @Override
     public void run() {
         BizContext oldContext = BizContextHolder.get();

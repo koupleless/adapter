@@ -37,6 +37,12 @@ public class BizCallable implements Callable {
         this.bizContext = BizContextHolder.cloneBizContext();
     }
 
+    public BizCallable(Callable callable, ClassLoader classLoader) {
+        this.callable = callable;
+        this.classLoader = classLoader;
+        this.bizContext = BizContextHolder.cloneBizContext();
+    }
+
     @Override
     public Object call() throws Exception {
         BizContext oldContext = BizContextHolder.get();
