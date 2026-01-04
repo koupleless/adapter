@@ -34,7 +34,11 @@
             <version>0.0.1</version>
             <scope>compile</scope>
         </dependency>
-
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>com.alipay.sofa.koupleless</groupId>
             <artifactId>koupleless-adapter-test-utils</artifactId>
